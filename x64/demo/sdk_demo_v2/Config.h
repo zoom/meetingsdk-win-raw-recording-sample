@@ -1,10 +1,14 @@
 #pragma once
 #include <yaml-cpp/yaml.h>
+#include <boost/url/url_view.hpp>
+#include <boost/algorithm/string.hpp>
 #include <codecvt>
 #include <iostream>
 #include <algorithm>
 #include <locale>
 #include <string>
+using namespace boost::urls;
+
 
 #include "Singleton.h"
 
@@ -18,7 +22,9 @@ class Config : public Singleton<Config>
 
     string m_meeting_id;
     string m_display_name;
-    string m_passcode;
+    string m_password;
+    string m_join_url;
+    string m_join_token;
     
     string m_sdk_key;
     string m_sdk_secret;
@@ -31,11 +37,15 @@ class Config : public Singleton<Config>
     wstring_convert<codecvt_utf8_utf16<wchar_t>> m_converter;
 
 public:
-    bool use_join_token() const;
+    bool parseJoinUrl(string const& url);
+    bool useJoinToken() const;
 
+    string joinToken() const;
+    void joinToken(string const& token);
+    
     string meetingId() const;
     string displayName() const;
-    string passcode() const;
+    string password() const;
     string sdkKey() const;
     string sdkSecret() const;
     string s2sKey() const;
@@ -43,5 +53,5 @@ public:
     string s2sAccount() const;
 
 
-    wstring WidenStr(string str);
+    wstring widenStr(string str);
 };

@@ -1,9 +1,12 @@
 #include "stdafx.h"
 #include "LOGIN_sdk_login_UI.h"
 #include <stdarg.h>
+#include <rawdata/zoom_rawdata_api.h>
+
 #include "auth_service_interface.h"
 #include "Config.h"
 #include "mess_info.h"
+#include "ZoomSDKAudioRawDataDelegate.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //class CSDKLoginWithSSOUIGroup 
@@ -154,9 +157,9 @@ void CSDKWithoutLoginStartJoinMeetingUIGroup::Show()
 {
 		Config* config = &Config::getInstance();
 		
-		const auto meeting_id = config->WidenStr(config->meetingId());
-		const auto passcode = config->WidenStr(config->passcode());
-		const auto display_name = config->WidenStr(config->displayName());
+		const auto meeting_id = config->widenStr(config->meetingId());
+		const auto passcode = config->widenStr(config->password());
+		const auto display_name = config->widenStr(config->displayName());
 		
 		m_editMeetingNumber->SetText(meeting_id.c_str());
 		m_editMeetingPassword->SetText(passcode.c_str());
@@ -207,6 +210,15 @@ void CSDKWithoutLoginStartJoinMeetingUIGroup::DoWithoutLoginStartJoinMeetingBtnC
 	withoutloginParam.isDirectShareDesktop = false;
 	withoutloginParam.isVideoOff = true;
 	withoutloginParam.isAudioOff = true;
+
+	// Join using the Join Token
+	auto* config = &Config::getInstance();
+	if (config->useJoinToken())
+	{
+		const wstring token = config->widenStr(config->joinToken());
+		wcout << "Using Join Token: " << token << endl;
+		withoutloginParam.app_privilege_token = token.c_str();
+	}
 	
 
 	if(MeetingNumber.size() > 0)
@@ -296,9 +308,29 @@ void CSDKWithoutLoginStartJoinMeetingUIGroup::onMeetingStatusChanged(ZOOM_SDK_NA
 				m_parentFrame->GetAppEvent()->onShowLoggedInUI(Demo_Meeting_Join_Only);
 				
 				cout << "Joined Meeting Successfully" << endl;
-				cout << "Requesting Recording Privilege" << endl;
-				const auto recordCtrl = SDKInterfaceWrap::GetInst().GetMeetingService()->GetMeetingRecordingController();
-				recordCtrl->RequestLocalRecordingPrivilege();
+				
+				const auto* config = &Config::getInstance();
+				const auto record_ctrl = SDKInterfaceWrap::GetInst().GetMeetingService()->GetMeetingRecordingController();
+				
+				if (config->useJoinToken())
+				{
+					const auto result = record_ctrl->StartRawRecording();
+					
+					if(result != ZOOMSDK::SDKERR_SUCCESS)
+					{
+						cerr << "Failed to Start Raw Recording with status " << result << endl;
+						return;
+					}
+		
+					cout << "Starting Raw Recording" << endl; 
+					const auto delegate = new ZoomSDKAudioRawDataDelegate();
+					const auto helper = ZOOM_SDK_NAMESPACE::GetAudioRawdataHelper();
+		
+					helper->subscribe(delegate);	
+				} else {
+					cout << "Requesting Recording Privilege" << endl;
+					record_ctrl->RequestLocalRecordingPrivilege();
+				}
 			}
 		}
 	default:

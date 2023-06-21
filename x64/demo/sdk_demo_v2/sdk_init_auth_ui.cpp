@@ -164,8 +164,8 @@ void CAuthSDKUIGroup::Show()
 			m_mainFrame->SetCurrentPage(m_AuthSDKPage);
 			m_editSDKJWTToken->SetText(ZoomAuthenticator::getJwt());
 
-			const auto* config = &Config::getInstance();
-			if (config->use_join_token()) {
+			auto* config = &Config::getInstance();
+			if (config->useJoinToken()) {
 				
 				ZoomApi api;
 				
@@ -175,10 +175,13 @@ void CAuthSDKUIGroup::Show()
 					endp << "/meetings/" << config->meetingId() << "/jointoken/local_recording";
 
 					const auto res = api.request(http::verb::get,endp.str());
-					/*const auto pt = api.parseJson(res);
-					const auto token = pt.get<std::string>("token");
+					const auto pt = api.parseJson(res);
+					const auto token = pt.get<string>("token");
 
-					cout << "Token: " << token;*/
+					cout << "Join Token: " << token << endl;
+					config->joinToken(token);
+					
+					
 				}
 				
 			}

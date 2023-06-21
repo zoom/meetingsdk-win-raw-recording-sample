@@ -2,7 +2,6 @@
 #include "sdk_demo_app.h"
 
 #include <iostream>
-#include "Config.h"
 
 CSDKDemoApp g_demoApp;
 

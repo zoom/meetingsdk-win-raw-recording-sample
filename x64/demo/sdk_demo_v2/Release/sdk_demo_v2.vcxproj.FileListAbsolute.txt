@@ -1,1 +1,0 @@
-C:\Users\maxm\RiderProjects\raw-audio-streaming\x64\demo\sdk_demo_v2\Release\sdk_demo_v2.vcxproj.CopyComplete

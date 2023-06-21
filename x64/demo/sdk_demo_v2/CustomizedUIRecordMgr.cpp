@@ -378,10 +378,10 @@ void CustomizedUIRecordMgr::onRecordPriviligeChanged(bool bCanRec)
 	if(bCanRec)
 	{
 		cout << "Recording Privilege Granted" << endl; 
-		const auto recordCtrl = SDKInterfaceWrap::GetInst().GetMeetingService()->GetMeetingRecordingController();
-		if(recordCtrl->StartRawRecording() != ZOOMSDK::SDKERR_SUCCESS) return;
+		const auto record_ctrl = SDKInterfaceWrap::GetInst().GetMeetingService()->GetMeetingRecordingController();
+		if(record_ctrl->StartRawRecording() != ZOOMSDK::SDKERR_SUCCESS) return;
 		
-		cout << "Raw Recording Started" << endl; 
+		cout << "Starting Raw Recording" << endl; 
 		const auto delegate = new ZoomSDKAudioRawDataDelegate();
 		const auto helper = ZOOM_SDK_NAMESPACE::GetAudioRawdataHelper();
 		
