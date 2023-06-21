@@ -3,6 +3,7 @@
 *.yaml
 !sample.*.yaml
 
+.idea
 x64/bin/sdk_demo_v2.exe
 x64/bin/sdk_demo_v2.map
 x64/bin/sdk_demo_v2.pdb
