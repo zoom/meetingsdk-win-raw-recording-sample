@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Window size="524,376"  caption="0,0,0,32" disabledfontcolor="0xFF808080" >
+  <!--Font size 9-->
+  <Font id="0" name="Segoe UI" size="12" bold="true"/>
+  <Font id="1" name="Segoe UI" size="12" bold="false"/>
+  <!--Font size 10-->
+  <Font id="2" name="Segoe UI" size="13" bold="false"/>
+  <Font id="3" name="Segoe UI" size="13" bold="true"/>
+  <!--Font size 11-->
+  <Font id="4" name="Segoe UI" size="15" bold="false"/>
+  <Font id="5" name="Segoe UI" size="15" bold="true"/>
+  <!--Font size xx-->
+  <Font id="6" name="Segoe UI" size="14" bold="false"/>
+  <Font id="7" name="Segoe UI" size="14" bold="true"/>
+  <!--8-->
+  <Font id="8" name="Segoe UI" size="21" bold="true"/>
+  <!--9-->
+  <Font id="9" name="Segoe UI" size="17" bold="true"/>
+  <!--10-->
+  <Font id="10" name="Segoe UI" size="24" bold="false"/>
+  <!--11-->
+  <Font id="11" name="Segoe UI" size="20" bold="false"/>
+  <!--12-->
+  <Font id="12" name="Segoe UI" size="14" bold="false"/>
+  <Font id="13" name="Segoe UI" size="17" bold="false"/>
+
+  <Default name="Button" value=" height=&quot;30&quot; width=&quot;100&quot; hotbkcolor=&quot;#FF179FF5 &quot; pushedbkcolor=&quot;#FF179FF5 &quot; focusedbkcolor=&quot;#FF179FF5 &quot; bkcolor=&quot;#FF179FF5 &quot;" />
+  <Default name="VScrollBar" value="width=&quot;10&quot; button1normalimage=&quot;res='vscroll_bar.png' restype='ZPIMGRES' source='0,0,10,10' &quot; button1hotimage=&quot;res='vscroll_bar.png' restype='ZPIMGRES' source='20,0,30,10'&quot; button1pushedimage=&quot;res='vscroll_bar.png' restype='ZPIMGRES' source='10,0,20,10'&quot; button1disabledimage=&quot;res='vscroll_bar.png' restype='ZPIMGRES' source='30,0,40,10'&quot; button2normalimage=&quot;res='vscroll_bar.png' restype='ZPIMGRES' source='0,26,10,36'&quot; button2hotimage=&quot;res='vscroll_bar.png' restype='ZPIMGRES' source='20,26,30,36'&quot; button2pushedimage=&quot;res='vscroll_bar.png' restype='ZPIMGRES' source='10,26,20,36'&quot; button2disabledimage=&quot;res='vscroll_bar.png' restype='ZPIMGRES' source='30,26,40,36'&quot; thumbnormalimage=&quot;res='vscroll_bar.png' restype='ZPIMGRES' source='0,12,10,25'&quot; thumbhotimage=&quot;res='vscroll_bar.png' restype='ZPIMGRES' source='20,12,30,25'&quot; thumbpushedimage=&quot;res='vscroll_bar.png' restype='ZPIMGRES' source='10,12,20,25'&quot; thumbdisabledimage   =&quot;res='vscroll_bar.png' restype='ZPIMGRES' source='30,12,40,25'&quot; bknormalimage=&quot;res='vscroll_bar.png' restype='ZPIMGRES' source='0,11,10,12'&quot; bkhotimage=&quot;res='vscroll_bar.png' restype='ZPIMGRES' source='20,11,30,12'&quot; bkpushedimage=&quot;res='vscroll_bar.png' restype='ZPIMGRES' source='10,11,20,12'&quot; bkdisabledimage=&quot;res='vscroll_bar.png' restype='ZPIMGRES' source='30,11,40,12'&quot; " />
+
+  <VerticalLayout  bkcolor="#FFEFEFEF" bkcolor2="#FFEFEFEF">
+	<HorizontalLayout name="tab_for_login" height="38" bkcolor="#FFF8F8F8" >
+		<Option align="center,singleline" valign="center"  name="tabbtn_login_with_SSO" text="SSO Login" padding="0,12,0,0"	
+					textcolor="#FFB7B7B7" selectedtextcolor="#FF000000" font="2"  width="131" height="34" group="tab_main_login" selected="true" focuspadding="5,3,5,9" />
+		<Option align="center,singleline" valign="center"  name="tabbtn_login_with_RestAPI" text="RestAPI Without Login"  padding="0,12,0,0"	
+					textcolor="#FFB7B7B7" selectedtextcolor="#FF000000" font="2"  width="131" height="34" group="tab_main_login" focuspadding="5,3,5,9" />
+		<Option align="center,singleline" valign="center"  name="tabbtn_JoinMeetingOnly" text="Only Join" padding="0,12,0,0" 
+					textcolor="#FFB7B7B7"  selectedtextcolor="#FF000000" font="2"  width="131" height="34" group="tab_main_login"  focuspadding="5,3,5,9"/>
+    </HorizontalLayout>
+	<Control height="1" bkcolor="#FFBFBFBF" />
+	
+     <Container name="panel_rule_for_cutoff" visible="false" hight = "1">
+    </Container>
+		
+	<HorizontalLayout bkcolor="#FFEFEFEF" bkcolor2="#FFEFEFEF">
+		<VerticalLayout padding="5,0,0,0" width="114">
+			<Control />
+			<Control bkimage="res='zoom_logo.png' restype='ZPIMGRES' " width="114" height="114" align="center,singleline" valign="center"/>
+			<Control />
+		</VerticalLayout >
+		<VerticalLayout name="panel_Tab_Main" padding ="20,0,0,0" >
+		  <VerticalLayout name="panel_Login_Content">
+				<VerticalLayout name="panel_RestAPI_Without_Login" visible="false" >
+					<RichEdit name="edit_restapi_user_zak" padding="0,80,0,0" prompttext="user zak" bkcolor="#FFFFFFFF" textcolor="#FFB7B7B7" font="6" width="300" height="35"
+					  inset="4,5,0,4" multiline="false" autohscroll="true"  wanttab="false" rich="false" password="true"/>
+					<Control height="10"/>
+					<RichEdit name="edit_restapi_meeting_number" prompttext="meeting number" bkcolor="#FFFFFFFF" textcolor="#FFB7B7B7" font="6" width="300" height="35"
+					  inset="4,5,0,4" multiline="false" autohscroll="true"  wanttab="false" rich="false"/>
+					<Control height="10"/>
+					<RichEdit name="edit_restapi_ScreenName" prompttext="Name to display in the meeting" bkcolor="#FFFFFFFF" textcolor="#FFB7B7B7" font="6" width="300" height="35"
+					  inset="4,5,0,4" multiline="false" autohscroll="true"  wanttab="false" rich="false"/>
+				    <HorizontalLayout padding="0,20,0,0" height="35" width="300">
+						<Control />
+						<Button name="btn_reset_api_without_login" text="Start an instance meeting" textcolor="#FFFFFFFF" font="6" height="35" width="170"/>
+						<Button name="btn_reset_api_join_without_login" padding="10,0,0,0" text="Join" textcolor="#FFFFFFFF" font="6" height="35" width="100"/>
+						<Control />
+					</HorizontalLayout>
+				</VerticalLayout>
+				<VerticalLayout name="panel_Login_With_SSO" visible="false" >
+					<RichEdit name="edit_prefix_of_vanity_url" padding="0,80,0,0" prompttext="prefix of vanity url" bkcolor="#FFFFFFFF" textcolor="#FFB7B7B7" font="6" width="300" height="35"
+					  inset="4,5,0,4" multiline="false" autohscroll="true"  wanttab="false" rich="false"/>
+					<RichEdit name="edit_sso_token" padding="0,10,0,0" prompttext="SSO login Web URI Protocol" bkcolor="#FFFFFFFF" textcolor="#FFB7B7B7" font="6" width="300" height="35"
+					  inset="4,5,0,4" multiline="false" autohscroll="true"  wanttab="false" rich="false"/>
+					<HorizontalLayout padding="0,20,0,0" height="35" width="300">
+						<Control />
+						<Button name="btn_sso_login" text="login" textcolor="#FFFFFFFF" font="6" height="35" width="120"/>
+						<Button name="btn_get_sso_url" padding="10,0,0,0" text="generate web url" textcolor="#FFFFFFFF" font="6" height="35" width="120"/>
+						<Control />
+					</HorizontalLayout>
+				</VerticalLayout>
+				<VerticalLayout name="panel_Join_Meeting_Only"  visible="false"  >
+					<RichEdit name="edit_meeting_number" padding="0,80,0,0" prompttext="Meeting number" bkcolor="#FFFFFFFF" textcolor="#FFB7B7B7" font="6" width="300" height="35"
+					  inset="4,5,0,4" multiline="false" autohscroll="true"  wanttab="false" rich="false"/>
+					<Control height="10"/>
+					<RichEdit name="edit_screen_name" prompttext="Name to display in the meeting" bkcolor="#FFFFFFFF" textcolor="#FFB7B7B7" font="6" width="300" height="35"
+					  inset="4,5,0,4" multiline="false" autohscroll="true"  wanttab="false" rich="false"/>
+					<Control height="10"/>
+					<RichEdit name="edit_meeting_password" prompttext="Meeting password" bkcolor="#FFFFFFFF" textcolor="#FFB7B7B7" font="6" width="300" height="35"
+					  inset="4,5,0,4" multiline="false" autohscroll="true"  wanttab="false" rich="false" password="true"/>
+				    <HorizontalLayout padding="0,20,0,0" height="35" width="300">
+						<Control />
+						<Button name="btn_join" text="join" textcolor="#FFFFFFFF" font="6" height="35" width="100"/>
+						<Control />
+					</HorizontalLayout>
+				</VerticalLayout>
+		  </VerticalLayout>
+		  <VerticalLayout name="waiting" padding ="20,0,0,0" visible="false" >
+			<Control />
+			<HorizontalLayout height="32">
+				<Control />
+				<GifAnim name="gif_waiting" autosize="true" bkimage="waiting.gif" gifrestype="ZPIMGRES" autoplay="false" />
+				<Control />
+			</HorizontalLayout>
+			<Control height="5"/>
+			<HorizontalLayout height="20">
+				<Control />
+				<label name="waiting_label" minwidth="172" text="connect......" font="7" />
+				<Control />
+			</HorizontalLayout>
+			<Control />
+		  </VerticalLayout>
+		</VerticalLayout>
+	</HorizontalLayout>
+ </VerticalLayout>
+</Window>

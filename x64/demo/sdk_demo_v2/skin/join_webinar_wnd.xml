@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Window size="400,500"  caption="0,0,0,32"  disabledfontcolor="0xFF808080" >
+	<!--Font size 9-->
+	<Font id="0" name="Segoe UI" size="12" bold="true"/>
+	<Font id="1" name="Segoe UI" size="12" bold="false"/>
+	<!--Font size 10-->
+	<Font id="2" name="Segoe UI" size="13" bold="false"/>
+	<Font id="3" name="Segoe UI" size="13" bold="true"/>
+	<!--Font size 11-->
+	<Font id="4" name="Segoe UI" size="15" bold="false"/>
+	<Font id="5" name="Segoe UI" size="15" bold="true"/>
+	<!--Font size xx-->
+	<Font id="6" name="Segoe UI" size="14" bold="false"/>
+	<Font id="7" name="Segoe UI" size="14" bold="true"/>
+	<!--8-->
+	<Font id="8" name="Segoe UI" size="21" bold="true"/>
+	<!--9-->
+	<Font id="9" name="Segoe UI" size="17" bold="true"/>
+	<!--10-->
+	<Font id="10" name="Segoe UI" size="24" bold="true"/>
+	<!--11-->
+	<Font id="11" name="Segoe UI" size="20" bold="false"/>
+	<!--12-->
+	<Font id="12" name="Segoe UI" size="14" bold="false"/>
+	<Font id="13" name="Segoe UI" size="17" bold="false"/>
+	<Default name="Button" value=" height=&quot;30&quot; width=&quot;100&quot; hotbkcolor=&quot;#FF179FF5 &quot; pushedbkcolor=&quot;#FF179FF5 &quot; focusedbkcolor=&quot;#FF179FF5 &quot; bkcolor=&quot;#FF179FF5 &quot;" />
+	<Default name="VScrollBar" value="width=&quot;10&quot; button1normalimage=&quot;res='vscroll_bar.png' restype='ZPIMGRES' source='0,0,10,10' &quot; button1hotimage=&quot;res='vscroll_bar.png' restype='ZPIMGRES' source='20,0,30,10'&quot; button1pushedimage=&quot;res='vscroll_bar.png' restype='ZPIMGRES' source='10,0,20,10'&quot; button1disabledimage=&quot;res='vscroll_bar.png' restype='ZPIMGRES' source='30,0,40,10'&quot; button2normalimage=&quot;res='vscroll_bar.png' restype='ZPIMGRES' source='0,26,10,36'&quot; button2hotimage=&quot;res='vscroll_bar.png' restype='ZPIMGRES' source='20,26,30,36'&quot; button2pushedimage=&quot;res='vscroll_bar.png' restype='ZPIMGRES' source='10,26,20,36'&quot; button2disabledimage=&quot;res='vscroll_bar.png' restype='ZPIMGRES' source='30,26,40,36'&quot; thumbnormalimage=&quot;res='vscroll_bar.png' restype='ZPIMGRES' source='0,12,10,25'&quot; thumbhotimage=&quot;res='vscroll_bar.png' restype='ZPIMGRES' source='20,12,30,25'&quot; thumbpushedimage=&quot;res='vscroll_bar.png' restype='ZPIMGRES' source='10,12,20,25'&quot; thumbdisabledimage   =&quot;res='vscroll_bar.png' restype='ZPIMGRES' source='30,12,40,25'&quot; bknormalimage=&quot;res='vscroll_bar.png' restype='ZPIMGRES' source='0,11,10,12'&quot; bkhotimage=&quot;res='vscroll_bar.png' restype='ZPIMGRES' source='20,11,30,12'&quot; bkpushedimage=&quot;res='vscroll_bar.png' restype='ZPIMGRES' source='10,11,20,12'&quot; bkdisabledimage=&quot;res='vscroll_bar.png' restype='ZPIMGRES' source='30,11,40,12'&quot; " />
+	<Default name="Slider"  value="thumbsize=&quot;10,10&quot; bkimage=&quot;res='slider_bg.png' corner='6,0,6,0' mask='#FFFF00FF'&quot; foreimage=&quot;res='slider_fg.png' corner='6,0,6,0' mask='#FFFF00FF'&quot; thumbimage=&quot;res='slider_thumb.png' source='30,0,40,10' mask='#FFDAEBF9'&quot; thumbhotimage=&quot;res='slider_thumb.png' source='10,0,20,10' mask='#FFDAEBF9'&quot; "/>
+
+	<VerticalLayout bkcolor="#FFEFEFEF" >
+		<Label text="Enter your email and name" padding="80,30,20,0" font="10" textcolor="#FF000000" height="30"  />
+		
+		<RichEdit name="edit_email" padding="50,20,50,0" prompttext="Your email" bkcolor="#FFFFFFFF" textcolor="#FFB7B7B7" font="6" width="400" height="35"
+					  inset="4,5,0,4" multiline="false" autohscroll="true"  wanttab="false" rich="false"/>
+	    <RichEdit name="edit_name" padding="50,10,50,0" prompttext="Your name" bkcolor="#FFFFFFFF" textcolor="#FFB7B7B7" font="6" width="400" height="35"
+		              inset="4,5,0,4" multiline="false" autohscroll="true"  wanttab="false" rich="false"/>
+		<HorizontalLayout padding="0,20,0,0" height="35" >
+			<Control />
+			<Button name="btn_join" text="Join Webinar" textcolor="#FFFFFFFF" font="6" height="35" width="120"/>
+			<Button name="btn_cancel" padding="20,0,30,0" text="Cancel" textcolor="#FFFFFFFF" font="6" height="35" width="120"/>
+		</HorizontalLayout>
+	</VerticalLayout>
+</Window>
