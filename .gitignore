@@ -15,6 +15,7 @@ x64/demo/sdk_demo_v2/Release/*.obj
 x64/demo/sdk_demo_v2/Release/*.log
 x64/demo/sdk_demo_v2/Release/*.tlog
 x64/bin/boost_url-vc143-mt-x64-1_82.dll
+x64/demo/sdk_demo_v2/Release/sdk_demo_v2.res
 
 
 

@@ -77,7 +77,7 @@ public:
     void ShowWindow(bool bShow = true, bool bTakeFocus = true);
     UINT ShowModal();
     void Close(UINT nRet = IDOK);
-    void CenterWindow();	// 戮脫脰脨拢卢脰搂鲁脰脌漏脮鹿脝脕脛禄
+    void CenterWindow();	// 居中，支持扩展屏幕
     void SetIcon(UINT nRes);
 
     LRESULT SendMessage(UINT uMsg, WPARAM wParam = 0, LPARAM lParam = 0L);
@@ -96,7 +96,7 @@ protected:
     static LRESULT CALLBACK __ControlProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 protected:
-    HWND m_hWnd = NULL;
+    HWND m_hWnd;
     WNDPROC m_OldWndProc;
     bool m_bSubclassed;
 };
