@@ -2,13 +2,10 @@
 #include "CustomizedUIRecordMgr.h"
 
 #include <iostream>
-
+#include <rawdata/zoom_rawdata_api.h>
 #include "ZoomSDKAudioRawDataDelegate.h"
-#include "rawdata/rawdata_audio_helper_interface.h"
-#include "zoom_sdk_raw_data_def.h"
-#include "rawdata/zoom_rawdata_api.h"
 
-CustomizedUIRecordMgr* CustomizedUIRecordMgr::s_recordMgrObj = NULL;
+CustomizedUIRecordMgr* CustomizedUIRecordMgr::s_recordMgrObj=NULL;
 
 CustomizedUIRecordMgr::CustomizedUIRecordMgr()
 {
@@ -16,12 +13,13 @@ CustomizedUIRecordMgr::CustomizedUIRecordMgr()
 }
 
 CustomizedUIRecordMgr::~CustomizedUIRecordMgr()
-{}
+{
+
+}
 
 CustomizedUIRecordMgr* CustomizedUIRecordMgr::GetInstance()
 {
-	if(!s_recordMgrObj)
-	{
+	if (!s_recordMgrObj){
 		s_recordMgrObj = new CustomizedUIRecordMgr();
 	}
 	return s_recordMgrObj;
@@ -29,27 +27,23 @@ CustomizedUIRecordMgr* CustomizedUIRecordMgr::GetInstance()
 
 void CustomizedUIRecordMgr::GetRecordController()
 {
-	if(m_pRecordController)
-	{
+	if (m_pRecordController){
 		return;
 	}
 
 	ZOOM_SDK_NAMESPACE::IMeetingService* pMeetingService = SDKInterfaceWrap::GetInst().GetMeetingService();
-	if(!pMeetingService)
-	{
-		return;
+	if ( !pMeetingService ){
+		return;	
 	}
-
+	
 	m_pRecordController = pMeetingService->GetMeetingRecordingController();
-	if(!m_pRecordController)
-	{
+	if (!m_pRecordController){
 		return;
 	}
 
 	ZOOM_SDK_NAMESPACE::SDKError rtn;
 	rtn = m_pRecordController->SetEvent(this);
-	if(rtn != ZOOM_SDK_NAMESPACE::SDKERR_SUCCESS)
-	{
+	if (rtn != ZOOM_SDK_NAMESPACE::SDKERR_SUCCESS){
 		return;
 	}
 
@@ -57,7 +51,7 @@ void CustomizedUIRecordMgr::GetRecordController()
 	/*
 	rtn = m_pRecordController->RequestCustomizedLocalRecordingSource();
 	if (rtn != ZOOM_SDK_NAMESPACE::SDKERR_SUCCESS){
-	    return;
+		return;
 	}
 	*/
 }
@@ -65,29 +59,23 @@ void CustomizedUIRecordMgr::GetRecordController()
 bool CustomizedUIRecordMgr::StartRecording(time_t& startTimestamp)
 {
 	GetRecordController();
-	if(!m_pRecordController)
-	{
+	if (!m_pRecordController){
 		return false;
 	}
 
 	ZOOM_SDK_NAMESPACE::ISettingService* pSettingService = SDKInterfaceWrap::GetInst().GetSettingService();
-	if(!pSettingService)
-	{
+	if (!pSettingService){
 		return false;
 	}
 	ZOOM_SDK_NAMESPACE::IRecordingSettingContext* pRcdSetting = pSettingService->GetRecordingSettings();
-	if(!pRcdSetting)
-	{
+	if (!pRcdSetting){
 		return false;
 	}
 
-	ZOOM_SDK_NAMESPACE::SDKError rtn = m_pRecordController->StartRecording(startTimestamp);
-	if(rtn == ZOOM_SDK_NAMESPACE::SDKERR_SUCCESS)
-	{
+	ZOOM_SDK_NAMESPACE::SDKError rtn = m_pRecordController->StartRecording(startTimestamp); 
+	if (rtn == ZOOM_SDK_NAMESPACE::SDKERR_SUCCESS){
 		return true;
-	}
-	else
-	{
+	}else {
 		return false;
 	}
 }
@@ -95,19 +83,15 @@ bool CustomizedUIRecordMgr::StartRecording(time_t& startTimestamp)
 bool CustomizedUIRecordMgr::StopRecording(time_t& stopTimestamp)
 {
 	GetRecordController();
-
-	if(!m_pRecordController)
-	{
+	
+	if (!m_pRecordController){
 		return false;
 	}
 
 	ZOOM_SDK_NAMESPACE::SDKError rtn = m_pRecordController->StopRecording(stopTimestamp);
-	if(rtn == ZOOM_SDK_NAMESPACE::SDKERR_SUCCESS)
-	{
+	if (rtn == ZOOM_SDK_NAMESPACE::SDKERR_SUCCESS){
 		return true;
-	}
-	else
-	{
+	}else {
 		return false;
 	}
 }
@@ -116,19 +100,15 @@ bool CustomizedUIRecordMgr::StartCloudRecording()
 {
 	GetRecordController();
 
-	if(!m_pRecordController)
-	{
+	if (!m_pRecordController){
 		return false;
 	}
-
+	
 	ZOOM_SDK_NAMESPACE::SDKError rtn;
 	rtn = m_pRecordController->StartCloudRecording();
-	if(rtn == ZOOM_SDK_NAMESPACE::SDKERR_SUCCESS)
-	{
+	if (rtn == ZOOM_SDK_NAMESPACE::SDKERR_SUCCESS){
 		return true;
-	}
-	else
-	{
+	}else {
 		return false;
 	}
 }
@@ -137,19 +117,15 @@ bool CustomizedUIRecordMgr::StopCloudRecording()
 {
 	GetRecordController();
 
-	if(!m_pRecordController)
-	{
+	if (!m_pRecordController){
 		return false;
 	}
 
 	ZOOM_SDK_NAMESPACE::SDKError rtn;
 	rtn = m_pRecordController->StopCloudRecording();
-	if(rtn == ZOOM_SDK_NAMESPACE::SDKERR_SUCCESS)
-	{
+	if (rtn == ZOOM_SDK_NAMESPACE::SDKERR_SUCCESS){
 		return true;
-	}
-	else
-	{
+	}else {
 		return false;
 	}
 }
@@ -171,19 +147,15 @@ bool CustomizedUIRecordMgr::CanIStartCloudRecording()
 bool CustomizedUIRecordMgr::CanTheUserStartLocalRecording(unsigned int userid)
 {
 	GetRecordController();
-	if(!m_pRecordController)
-	{
+	if (!m_pRecordController){
 		return false;
 	}
 
 	ZOOM_SDK_NAMESPACE::SDKError rtn;
 	rtn = m_pRecordController->CanStartRecording(false, userid);
-	if(rtn == ZOOM_SDK_NAMESPACE::SDKERR_SUCCESS)
-	{
+	if (rtn == ZOOM_SDK_NAMESPACE::SDKERR_SUCCESS){
 		return true;
-	}
-	else
-	{
+	}else {
 		return false;
 	}
 }
@@ -195,19 +167,15 @@ bool CustomizedUIRecordMgr::CanTheUserStartLocalRecording(unsigned int userid)
 bool CustomizedUIRecordMgr::CanTheUserStartCloudRecording(unsigned int userid)
 {
 	GetRecordController();
-	if(!m_pRecordController)
-	{
+	if (!m_pRecordController){
 		return false;
 	}
 
 	ZOOM_SDK_NAMESPACE::SDKError rtn;
 	rtn = m_pRecordController->CanStartRecording(true, userid);
-	if(rtn == ZOOM_SDK_NAMESPACE::SDKERR_SUCCESS)
-	{
+	if (rtn == ZOOM_SDK_NAMESPACE::SDKERR_SUCCESS){
 		return true;
-	}
-	else
-	{
+	}else {
 		return false;
 	}
 }
@@ -219,15 +187,13 @@ bool CustomizedUIRecordMgr::CanTheUserStartCloudRecording(unsigned int userid)
 bool CustomizedUIRecordMgr::CanIChangeOthersRecordingPermission()
 {
 	GetRecordController();
-	if(!m_pRecordController)
-	{
+	if (!m_pRecordController){
 		return false;
 	}
 
 	ZOOM_SDK_NAMESPACE::SDKError rtn;
 	rtn = m_pRecordController->CanAllowDisAllowLocalRecording();
-	if(rtn == ZOOM_SDK_NAMESPACE::SDKERR_SUCCESS)
-	{
+	if (rtn == ZOOM_SDK_NAMESPACE::SDKERR_SUCCESS){
 		return true;
 	}
 	return false;
@@ -241,15 +207,13 @@ bool CustomizedUIRecordMgr::CanIChangeOthersRecordingPermission()
 bool CustomizedUIRecordMgr::DoesTheUserSupportLocalRecording(unsigned int userid)
 {
 	GetRecordController();
-	if(!m_pRecordController)
-	{
+	if (!m_pRecordController){
 		return false;
 	}
 
 	ZOOM_SDK_NAMESPACE::SDKError rtn;
 	rtn = m_pRecordController->IsSupportLocalRecording(userid);
-	if(rtn == ZOOM_SDK_NAMESPACE::SDKERR_SUCCESS)
-	{
+	if (rtn == ZOOM_SDK_NAMESPACE::SDKERR_SUCCESS){
 		return true;
 	}
 	return false;
@@ -258,15 +222,13 @@ bool CustomizedUIRecordMgr::DoesTheUserSupportLocalRecording(unsigned int userid
 bool CustomizedUIRecordMgr::AllowLocalRecording(unsigned int userid)
 {
 	GetRecordController();
-	if(!m_pRecordController)
-	{
+	if (!m_pRecordController){
 		return false;
 	}
 
 	ZOOM_SDK_NAMESPACE::SDKError rtn;
 	rtn = m_pRecordController->AllowLocalRecording(userid);
-	if(rtn == ZOOM_SDK_NAMESPACE::SDKERR_SUCCESS)
-	{
+	if (rtn == ZOOM_SDK_NAMESPACE::SDKERR_SUCCESS){
 		return true;
 	}
 	return false;
@@ -275,15 +237,13 @@ bool CustomizedUIRecordMgr::AllowLocalRecording(unsigned int userid)
 bool CustomizedUIRecordMgr::DisAllowLocalRecording(unsigned int userid)
 {
 	GetRecordController();
-	if(!m_pRecordController)
-	{
+	if (!m_pRecordController){
 		return false;
 	}
 
 	ZOOM_SDK_NAMESPACE::SDKError rtn;
 	rtn = m_pRecordController->DisAllowLocalRecording(userid);
-	if(rtn == ZOOM_SDK_NAMESPACE::SDKERR_SUCCESS)
-	{
+	if (rtn == ZOOM_SDK_NAMESPACE::SDKERR_SUCCESS){
 		return true;
 	}
 	return false;
@@ -291,43 +251,36 @@ bool CustomizedUIRecordMgr::DisAllowLocalRecording(unsigned int userid)
 
 void CustomizedUIRecordMgr::onRecording2MP4Done(bool bsuccess, int iResult, const wchar_t* szPath)
 {
-	TCHAR szMsg[256] = {0};
+	TCHAR szMsg[256]={0};
 
-	if(bsuccess)
-	{
-		swprintf_s(szMsg, sizeof(szMsg) / sizeof(TCHAR), _T("convert to mp4 success->%s"), szPath);
+	if (bsuccess){
+		swprintf_s(szMsg, sizeof(szMsg)/sizeof(TCHAR), _T("convert to mp4 success->%s"), szPath);
 		::MessageBox(NULL, szMsg, _T("winsdk demo"), MB_OK);
-	}
-	else
-	{
-		swprintf_s(szMsg, sizeof(szMsg) / sizeof(TCHAR), _T("iResult=%d"), iResult);
+	}else {
+		swprintf_s(szMsg, sizeof(szMsg)/sizeof(TCHAR), _T("iResult=%d"), iResult);
 		::MessageBox(NULL, szMsg, _T("winsdk demo"), MB_OK);
 	}
 }
 
 void CustomizedUIRecordMgr::onRecording2MP4Processing(int iPercentage)
 {
-	TCHAR szMsg[256] = {0};
-	swprintf_s(szMsg, sizeof(szMsg) / sizeof(TCHAR), _T("convent percent=%d"), iPercentage);
+	TCHAR szMsg[256]={0};
+	swprintf_s(szMsg, sizeof(szMsg)/sizeof(TCHAR), _T("convent percent=%d"), iPercentage);
 	//::MessageBox(NULL, szMsg, _T("winsdk demo"), MB_OK);
 }
 
 void CustomizedUIRecordMgr::onRecordingStatus(ZOOM_SDK_NAMESPACE::RecordingStatus status)
-{
-	switch(status)
+{	
+	switch (status)
 	{
-		/*
-	case ZOOM_SDK_NAMESPACE::Recording_Start:
+	case ZOOM_SDK_NAMESPACE::Recording_Start:	
 		{
-			if(SDKInterfaceWrap::GetInst().GetMeetingService()->GetMeetingChatController()->
-			                               IsMeetingChatLegalNoticeAvailable())
+			if (SDKInterfaceWrap::GetInst().GetMeetingService()->GetMeetingChatController()->IsMeetingChatLegalNoticeAvailable())
 			{
-				const wchar_t* sChartExplained = SDKInterfaceWrap::GetInst().GetMeetingService()->
-				                                                             GetMeetingChatController()->
-				                                                             getChatLegalNoticesExplained();
+				const wchar_t* sChartExplained = SDKInterfaceWrap::GetInst().GetMeetingService()->GetMeetingChatController()->getChatLegalNoticesExplained();
 				::MessageBox(NULL, sChartExplained, _T("winsdk demo"), MB_OK);
 			}
-			else
+			else 
 			{
 				::MessageBox(NULL, _T("local recording start"), _T("winsdk demo"), MB_OK);
 			}
@@ -335,7 +288,7 @@ void CustomizedUIRecordMgr::onRecordingStatus(ZOOM_SDK_NAMESPACE::RecordingStatu
 		break;
 	case ZOOM_SDK_NAMESPACE::Recording_Stop:
 		::MessageBox(NULL, _T("local recording stop"), _T("winsdk demo"), MB_OK);
-		break;*/
+		break;
 	case ZOOM_SDK_NAMESPACE::Recording_Pause:
 		::MessageBox(NULL, _T("local recording pause"), _T("winsdk demo"), MB_OK);
 		break;
@@ -352,7 +305,7 @@ void CustomizedUIRecordMgr::onCloudRecordingStatus(ZOOM_SDK_NAMESPACE::Recording
 {
 	wstring wstrMsg;
 
-	switch(status)
+	switch (status)
 	{
 	case ZOOM_SDK_NAMESPACE::Recording_Start:
 		wstrMsg = _T("cloud recording start");
@@ -375,8 +328,7 @@ void CustomizedUIRecordMgr::onCloudRecordingStatus(ZOOM_SDK_NAMESPACE::Recording
 
 void CustomizedUIRecordMgr::onRecordPriviligeChanged(bool bCanRec)
 {
-	if(bCanRec)
-	{
+	if (bCanRec){
 		cout << "Recording Privilege Granted" << endl; 
 		const auto record_ctrl = SDKInterfaceWrap::GetInst().GetMeetingService()->GetMeetingRecordingController();
 		if(record_ctrl->StartRawRecording() != ZOOMSDK::SDKERR_SUCCESS) return;
@@ -387,96 +339,94 @@ void CustomizedUIRecordMgr::onRecordPriviligeChanged(bool bCanRec)
 		
 		helper->subscribe(delegate);
 	}
-	else
+	else 
 		::MessageBox(NULL, _T("you can not record now."), _T("winsdk demo"), MB_OK);
 }
 
-void CustomizedUIRecordMgr::onCustomizedLocalRecordingSourceNotification(
-	ZOOM_SDK_NAMESPACE::ICustomizedLocalRecordingLayoutHelper* layout_helper)
+void CustomizedUIRecordMgr::onCustomizedLocalRecordingSourceNotification(ZOOM_SDK_NAMESPACE::ICustomizedLocalRecordingLayoutHelper* layout_helper)
 {
-	if(layout_helper)
+	if (layout_helper)
 	{
+
 		int support_layout = layout_helper->GetSupportLayout();
-		if(ZOOM_SDK_NAMESPACE::RECORDING_LAYOUT_MODE_SHARE_AND_VIDEO & support_layout)
+		if (ZOOM_SDK_NAMESPACE::RECORDING_LAYOUT_MODE_SHARE_AND_VIDEO & support_layout)
 		{
 			layout_helper->SelectRecordingLayoutMode(ZOOM_SDK_NAMESPACE::RECORDING_LAYOUT_MODE_SHARE_AND_VIDEO);
-			if(layout_helper->IsSendSharingSourceAvailable())
+			if (layout_helper->IsSendSharingSourceAvailable())
 			{
 				layout_helper->SelectSendSharingSource();
 			}
 			else
 			{
-				ZOOM_SDK_NAMESPACE::IList<unsigned int>* lst_recv_share = layout_helper->
-					GetValidRecvSharingSourceList();
+				ZOOM_SDK_NAMESPACE::IList<unsigned int >* lst_recv_share = layout_helper->GetValidRecvSharingSourceList();
 				int count_recv_share = lst_recv_share ? lst_recv_share->GetCount() : 0;
-				if(count_recv_share > 0)
+				if (count_recv_share > 0)
 				{
 					layout_helper->SelectRecvSharingSource(lst_recv_share->GetItem(0));
 				}
 			}
 
-			ZOOM_SDK_NAMESPACE::IList<unsigned int>* lst_video = layout_helper->GetValidVideoSourceList();
+			ZOOM_SDK_NAMESPACE::IList<unsigned int >* lst_video = layout_helper->GetValidVideoSourceList();
 			int count_video = lst_video ? lst_video->GetCount() : 0;
-			if(count_video > 0)
+			if (count_video > 0)
 			{
-				for(int i = 0; i < min(count_video, 5); i++)
+				for (int i = 0; i < min(count_video, 5); i++)
 				{
 					unsigned int user_id = lst_video->GetItem(i);
 					layout_helper->AddVideoSourceToRecList(user_id);
 				}
 			}
 
-			if(layout_helper->HasActiveVideoSource())
+			if (layout_helper->HasActiveVideoSource())
 			{
 				layout_helper->SelectActiveVideoSource();
 			}
 		}
-		else if(ZOOM_SDK_NAMESPACE::RECORDING_LAYOUT_MODE_ONLY_SHARE & support_layout)
+		else if (ZOOM_SDK_NAMESPACE::RECORDING_LAYOUT_MODE_ONLY_SHARE & support_layout)
 		{
 			layout_helper->SelectRecordingLayoutMode(ZOOM_SDK_NAMESPACE::RECORDING_LAYOUT_MODE_ONLY_SHARE);
-			if(layout_helper->IsSendSharingSourceAvailable())
+			if (layout_helper->IsSendSharingSourceAvailable())
 			{
 				layout_helper->SelectSendSharingSource();
 			}
 			else
 			{
-				ZOOM_SDK_NAMESPACE::IList<unsigned int>* lst_recv_share = layout_helper->
-					GetValidRecvSharingSourceList();
+				ZOOM_SDK_NAMESPACE::IList<unsigned int >* lst_recv_share = layout_helper->GetValidRecvSharingSourceList();
 				int count_recv_share = lst_recv_share ? lst_recv_share->GetCount() : 0;
-				if(count_recv_share > 0)
+				if (count_recv_share > 0)
 				{
 					layout_helper->SelectRecvSharingSource(lst_recv_share->GetItem(0));
 				}
 			}
 		}
-		else if(ZOOM_SDK_NAMESPACE::RECORDING_LAYOUT_MODE_VIDEO_WALL & support_layout)
+		else if (ZOOM_SDK_NAMESPACE::RECORDING_LAYOUT_MODE_VIDEO_WALL & support_layout)
 		{
 			layout_helper->SelectRecordingLayoutMode(ZOOM_SDK_NAMESPACE::RECORDING_LAYOUT_MODE_VIDEO_WALL);
-			ZOOM_SDK_NAMESPACE::IList<unsigned int>* lst_video = layout_helper->GetValidVideoSourceList();
+			ZOOM_SDK_NAMESPACE::IList<unsigned int >* lst_video = layout_helper->GetValidVideoSourceList();
 			int count_video = lst_video ? lst_video->GetCount() : 0;
-			if(count_video > 0)
+			if (count_video > 0)
 			{
-				for(int i = 0; i < min(count_video, 5); i++)
+				for (int i = 0; i < min(count_video, 5); i++)
 				{
 					unsigned int user_id = lst_video->GetItem(i);
 					layout_helper->AddVideoSourceToRecList(user_id);
 				}
 			}
 
-			if(layout_helper->HasActiveVideoSource())
+			if (layout_helper->HasActiveVideoSource())
 			{
 				layout_helper->SelectActiveVideoSource();
 			}
 		}
-		else if(ZOOM_SDK_NAMESPACE::RECORDING_LAYOUT_MODE_ACTIVE_VIDEO_ONLY & support_layout)
+		else if (ZOOM_SDK_NAMESPACE::RECORDING_LAYOUT_MODE_ACTIVE_VIDEO_ONLY & support_layout)
 		{
 			layout_helper->SelectRecordingLayoutMode(ZOOM_SDK_NAMESPACE::RECORDING_LAYOUT_MODE_ACTIVE_VIDEO_ONLY);
-			if(layout_helper->HasActiveVideoSource())
+			if (layout_helper->HasActiveVideoSource())
 			{
 				layout_helper->SelectActiveVideoSource();
 			}
 		}
-		else if(ZOOM_SDK_NAMESPACE::RECORDING_LAYOUT_MODE_ONLY_AUDIO & support_layout)
+		else if (ZOOM_SDK_NAMESPACE::RECORDING_LAYOUT_MODE_ONLY_AUDIO & support_layout)
 		{
 			layout_helper->SelectRecordingLayoutMode(ZOOM_SDK_NAMESPACE::RECORDING_LAYOUT_MODE_ONLY_AUDIO);
 		}
