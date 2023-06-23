@@ -1,0 +1,1166 @@
+diff --git a/x64/.DS_Store a/x64/.DS_Store
+deleted file mode 100644
+index 8067953..0000000
+Binary files a/x64/.DS_Store and /dev/null differ
+diff --git b/x64/bin/boost_url-vc143-mt-x64-1_82.dll b/x64/bin/boost_url-vc143-mt-x64-1_82.dll
+new file mode 100644
+index 0000000..2a89666
+Binary files /dev/null and b/x64/bin/boost_url-vc143-mt-x64-1_82.dll differ
+diff --git b/x64/bin/libcrypto-3-x64.dll b/x64/bin/libcrypto-3-x64.dll
+new file mode 100644
+index 0000000..20bad4f
+Binary files /dev/null and b/x64/bin/libcrypto-3-x64.dll differ
+diff --git b/x64/bin/libssl-3-x64.dll b/x64/bin/libssl-3-x64.dll
+new file mode 100644
+index 0000000..d74ac16
+Binary files /dev/null and b/x64/bin/libssl-3-x64.dll differ
+diff --git b/x64/bin/yaml-cpp.dll b/x64/bin/yaml-cpp.dll
+new file mode 100644
+index 0000000..f3a0393
+Binary files /dev/null and b/x64/bin/yaml-cpp.dll differ
+diff --git a/x64/demo/.DS_Store a/x64/demo/.DS_Store
+deleted file mode 100644
+index 3717abb..0000000
+Binary files a/x64/demo/.DS_Store and /dev/null differ
+diff --git b/x64/demo/sdk_demo_v2/Config.cpp b/x64/demo/sdk_demo_v2/Config.cpp
+new file mode 100644
+index 0000000..5813c70
+--- /dev/null
++++ b/x64/demo/sdk_demo_v2/Config.cpp
+@@ -0,0 +1,84 @@
++#include "stdafx.h"
++#include "Config.h"
++
++Config::Config()
++{
++	YAML::Node config = YAML::LoadFile("config.yaml");
++	YAML::Node credentials = YAML::LoadFile("credentials.yaml");
++
++	YAML::Node sdk = credentials["sdk"];
++	m_sdk_key = sdk["key"].as<string>();
++	m_sdk_secret = sdk["secret"].as<string>();
++
++	YAML::Node s2s = credentials["s2s"];
++	m_s2s_key = s2s["key"].as<string>();
++	m_s2s_secret = s2s["secret"].as<string>();
++	m_s2s_account = s2s["account"].as<string>();
++
++
++	YAML::Node meeting = config["meeting"];
++
++	m_meeting_id = meeting["id"].as<string>();
++	m_meeting_id.erase(remove_if(m_meeting_id.begin(), m_meeting_id.end(), isspace), m_meeting_id.end());
++
++	m_display_name = meeting["display_name"].as<string>();
++	m_password = meeting["passcode"].as<string>();
++
++	m_join_url = meeting["join_url"].as<string>();
++
++	if(m_join_url != "null")
++		parseJoinUrl(m_join_url);
++
++	m_use_join_token = meeting["join_token"].as<bool>();
++	
++	cout << "Meeting ID: " << m_meeting_id << endl;
++	cout << "Display Name: " << m_display_name << endl;
++	cout << "Using Join Token: " << boolalpha << m_use_join_token << endl;
++
++	cout << endl;
++}
++
++wstring Config::widenStr(string str)
++{
++	return m_converter.from_bytes(str);
++}
++
++bool Config::parseJoinUrl(string const& url)
++{
++	cout << "Parsing Join URL: " << url << endl;
++
++	const url_view uv(url);
++
++	if (uv.empty()) return false;
++
++	
++	for( auto v : uv.params())
++	{
++		if (v.key == "pwd")
++		{
++			m_password = v.value;
++			cout << "Password: " << m_password << endl;
++		}
++	}
++	
++	std::vector<std::string> paths;
++	split(paths, uv.path(), boost::is_any_of("/"));
++	m_meeting_id =  paths.at(2);
++	
++	return true;
++}
++
++/* Setters */
++void Config::joinToken(string const& token) { m_join_token = token; }
++
++/* Getters */
++bool Config::useJoinToken() const { return m_use_join_token; }
++string Config::joinToken() const { return m_join_token; }
++string Config::s2sKey() const { return m_s2s_key; }
++string Config::s2sSecret() const { return m_s2s_secret; }
++string Config::s2sAccount() const { return m_s2s_account; }
++string Config::meetingId() const { return m_meeting_id; }
++string Config::displayName() const { return m_display_name;}
++string Config::password() const { return m_password; }
++string Config::sdkKey() const { return m_sdk_key; }
++string Config::sdkSecret() const { return m_sdk_secret; }
+\ No newline at end of file
+diff --git b/x64/demo/sdk_demo_v2/Config.h b/x64/demo/sdk_demo_v2/Config.h
+new file mode 100644
+index 0000000..bcd0c1a
+--- /dev/null
++++ b/x64/demo/sdk_demo_v2/Config.h
+@@ -0,0 +1,57 @@
++#pragma once
++#include <yaml-cpp/yaml.h>
++#include <boost/url/url_view.hpp>
++#include <boost/algorithm/string.hpp>
++#include <codecvt>
++#include <iostream>
++#include <algorithm>
++#include <locale>
++#include <string>
++using namespace boost::urls;
++
++
++#include "Singleton.h"
++
++class Config : public Singleton<Config>
++{
++    friend class Singleton<Config>;
++    Config();
++    ~Config(){};
++
++    bool m_use_join_token;
++
++    string m_meeting_id;
++    string m_display_name;
++    string m_password;
++    string m_join_url;
++    string m_join_token;
++    
++    string m_sdk_key;
++    string m_sdk_secret;
++
++    string m_s2s_key;
++    
++    string m_s2s_secret;
++    string m_s2s_account;
++
++    wstring_convert<codecvt_utf8_utf16<wchar_t>> m_converter;
++
++public:
++    bool parseJoinUrl(string const& url);
++    bool useJoinToken() const;
++
++    string joinToken() const;
++    void joinToken(string const& token);
++    
++    string meetingId() const;
++    string displayName() const;
++    string password() const;
++    string sdkKey() const;
++    string sdkSecret() const;
++    string s2sKey() const;
++    string s2sSecret() const;
++    string s2sAccount() const;
++
++
++    wstring widenStr(string str);
++};
+diff --git a/x64/demo/sdk_demo_v2/CustomizedUIRecordMgr.cpp b/x64/demo/sdk_demo_v2/CustomizedUIRecordMgr.cpp
+index 4cce4d9..2250096 100644
+--- a/x64/demo/sdk_demo_v2/CustomizedUIRecordMgr.cpp
++++ b/x64/demo/sdk_demo_v2/CustomizedUIRecordMgr.cpp
+@@ -1,6 +1,10 @@
+ #include "stdafx.h"
+ #include "CustomizedUIRecordMgr.h"
+ 
++#include <iostream>
++#include <rawdata/zoom_rawdata_api.h>
++#include "ZoomSDKAudioRawDataDelegate.h"
++
+ CustomizedUIRecordMgr* CustomizedUIRecordMgr::s_recordMgrObj=NULL;
+ 
+ CustomizedUIRecordMgr::CustomizedUIRecordMgr()
+@@ -324,8 +328,17 @@ void CustomizedUIRecordMgr::onCloudRecordingStatus(ZOOM_SDK_NAMESPACE::Recording
+ 
+ void CustomizedUIRecordMgr::onRecordPriviligeChanged(bool bCanRec)
+ {
+-	if (bCanRec)
+-		::MessageBox(NULL, _T("you can record now."),     _T("winsdk demo"), MB_OK);
++	if (bCanRec){
++		cout << "Recording Privilege Granted" << endl; 
++		const auto record_ctrl = SDKInterfaceWrap::GetInst().GetMeetingService()->GetMeetingRecordingController();
++		if(record_ctrl->StartRawRecording() != ZOOMSDK::SDKERR_SUCCESS) return;
++		
++		cout << "Starting Raw Recording" << endl; 
++		const auto delegate = new ZoomSDKAudioRawDataDelegate();
++		const auto helper = ZOOM_SDK_NAMESPACE::GetAudioRawdataHelper();
++		
++		helper->subscribe(delegate);
++	}
+ 	else 
+ 		::MessageBox(NULL, _T("you can not record now."), _T("winsdk demo"), MB_OK);
+ }
+diff --git a/x64/demo/sdk_demo_v2/Join_meeting_for_login_user_ui.cpp b/x64/demo/sdk_demo_v2/Join_meeting_for_login_user_ui.cpp
+index f142607..e2cdb06 100644
+--- a/x64/demo/sdk_demo_v2/Join_meeting_for_login_user_ui.cpp
++++ b/x64/demo/sdk_demo_v2/Join_meeting_for_login_user_ui.cpp
+@@ -157,14 +157,14 @@ void CSDKJoinMeetingForLoginUserUIMgr::InitWindow()
+ 	m_JoinMeetingForLoginUserUIGroup.InitWindow(m_PaintManager,this);
+ 	RECT rc = { 0 };
+ 	if( !::GetClientRect(m_hWnd, &rc) ) return;
+-	rc.right = rc.left + 524;
+-	rc.bottom = rc.top + 376;
++	rc.right = 0;
++	rc.bottom = 0;
+ 	if( !::AdjustWindowRectEx(&rc, GetWindowStyle(m_hWnd), (!(GetWindowStyle(m_hWnd) & WS_CHILD) && (::GetMenu(m_hWnd) != NULL)), GetWindowExStyle(m_hWnd)) ) return;
+ 	int ScreenX = GetSystemMetrics(SM_CXSCREEN);
+ 	int ScreenY = GetSystemMetrics(SM_CYSCREEN);
+ 
+ 	::SetWindowPos(m_hWnd, NULL, (ScreenX - (rc.right - rc.left)) / 2, 
+-		(ScreenY - (rc.bottom - rc.top)) / 2, rc.right - rc.left, rc.bottom - rc.top, SWP_NOZORDER | SWP_SHOWWINDOW);
++		(ScreenY * 2), rc.right - rc.left, rc.bottom - rc.top, SWP_NOZORDER | SWP_SHOWWINDOW);
+ }
+ void CSDKJoinMeetingForLoginUserUIMgr::Notify( TNotifyUI& msg )
+ {
+diff --git a/x64/demo/sdk_demo_v2/LOGIN_sdk_login_UI.cpp b/x64/demo/sdk_demo_v2/LOGIN_sdk_login_UI.cpp
+index 47d8c8c..8c4068e 100644
+--- a/x64/demo/sdk_demo_v2/LOGIN_sdk_login_UI.cpp
++++ b/x64/demo/sdk_demo_v2/LOGIN_sdk_login_UI.cpp
+@@ -1,8 +1,12 @@
+ #include "stdafx.h"
+ #include "LOGIN_sdk_login_UI.h"
+ #include <stdarg.h>
++#include <rawdata/zoom_rawdata_api.h>
++
+ #include "auth_service_interface.h"
++#include "Config.h"
+ #include "mess_info.h"
++#include "ZoomSDKAudioRawDataDelegate.h"
+ 
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //class CSDKLoginWithSSOUIGroup 
+@@ -151,14 +155,19 @@ void CSDKWithoutLoginStartJoinMeetingUIGroup::Cleanup()
+ 
+ void CSDKWithoutLoginStartJoinMeetingUIGroup::Show()
+ {
+-	if (m_WithoutLoginStartJoinMeetingPage)
+-	{
+-		m_WithoutLoginStartJoinMeetingPage->SetVisible(true);
+-		if (m_parentFrame)
+-		{
+-			m_parentFrame->SetCurrentPage(m_WithoutLoginStartJoinMeetingPage);
+-		}
+-	}
++		Config* config = &Config::getInstance();
++		
++		const auto meeting_id = config->widenStr(config->meetingId());
++		const auto passcode = config->widenStr(config->password());
++		const auto display_name = config->widenStr(config->displayName());
++		
++		m_editMeetingNumber->SetText(meeting_id.c_str());
++		m_editMeetingPassword->SetText(passcode.c_str());
++		m_editScreenName->SetText(display_name.c_str());
++
++		cout << "Joining Meeting ..." << endl;
++
++		DoWithoutLoginStartJoinMeetingBtnClick();
+ }
+ 
+ void CSDKWithoutLoginStartJoinMeetingUIGroup::Hide()
+@@ -199,8 +208,18 @@ void CSDKWithoutLoginStartJoinMeetingUIGroup::DoWithoutLoginStartJoinMeetingBtnC
+ 	withoutloginParam.customer_key = NULL;
+ 	withoutloginParam.webinarToken = NULL;
+ 	withoutloginParam.isDirectShareDesktop = false;
+-	withoutloginParam.isVideoOff = false;
+-	withoutloginParam.isAudioOff = false;
++	withoutloginParam.isVideoOff = true;
++	withoutloginParam.isAudioOff = true;
++
++	// Join using the Join Token
++	auto* config = &Config::getInstance();
++	if (config->useJoinToken())
++	{
++		const wstring token = config->widenStr(config->joinToken());
++		wcout << "Using Join Token: " << token << endl;
++		withoutloginParam.app_privilege_token = token.c_str();
++	}
++	
+ 
+ 	if(MeetingNumber.size() > 0)
+ 	{
+@@ -218,10 +237,14 @@ void CSDKWithoutLoginStartJoinMeetingUIGroup::DoWithoutLoginStartJoinMeetingBtnC
+ 		}
+ 		ZOOM_SDK_NAMESPACE::SDKError err = ZOOM_SDK_NAMESPACE::SDKERR_SUCCESS;
+ 		err = m_withoutLoginJoinMeetingWorkFlow.JoinMeeting(joinParam);
++
++	
++		
+ 		if(ZOOM_SDK_NAMESPACE::SDKERR_SUCCESS == err)
+ 		{
+ 			m_bInMeeting = true;
+ 		}
++
+ 		return;
+ 	}
+ 	if (m_parentFrame)
+@@ -283,6 +306,31 @@ void CSDKWithoutLoginStartJoinMeetingUIGroup::onMeetingStatusChanged(ZOOM_SDK_NA
+ 			if(m_parentFrame)
+ 			{
+ 				m_parentFrame->GetAppEvent()->onShowLoggedInUI(Demo_Meeting_Join_Only);
++				
++				cout << "Joined Meeting Successfully" << endl;
++				
++				const auto* config = &Config::getInstance();
++				const auto record_ctrl = SDKInterfaceWrap::GetInst().GetMeetingService()->GetMeetingRecordingController();
++				
++				if (config->useJoinToken())
++				{
++					const auto result = record_ctrl->StartRawRecording();
++					
++					if(result != ZOOMSDK::SDKERR_SUCCESS)
++					{
++						cerr << "Failed to Start Raw Recording with status " << result << endl;
++						return;
++					}
++		
++					cout << "Starting Raw Recording" << endl; 
++					const auto delegate = new ZoomSDKAudioRawDataDelegate();
++					const auto helper = ZOOM_SDK_NAMESPACE::GetAudioRawdataHelper();
++		
++					helper->subscribe(delegate);	
++				} else {
++					cout << "Requesting Recording Privilege" << endl;
++					record_ctrl->RequestLocalRecordingPrivilege();
++				}
+ 			}
+ 		}
+ 	default:
+@@ -537,18 +585,21 @@ void CSDKLoginUIMgr::InitWindow()
+ 	m_LoginWithSSOUIGroup.InitWindow(m_PaintManager, this);
+ 	m_WithoutLoginStartJoinMeetingUIGroup.InitWindow(m_PaintManager,this);
+ 	m_RestAPIUserUIGroup.InitWindow(m_PaintManager,this);
++	
+ 	RECT rc = { 0 };
+ 	if( !::GetClientRect(m_hWnd, &rc) ) return;
+-	rc.right = rc.left + 524;
+-	rc.bottom = rc.top + 376;
++	rc.right = 0;
++	rc.bottom = 0;
+ 	if( !::AdjustWindowRectEx(&rc, GetWindowStyle(m_hWnd), (!(GetWindowStyle(m_hWnd) & WS_CHILD) && (::GetMenu(m_hWnd) != NULL)), GetWindowExStyle(m_hWnd)) ) return;
+ 	int ScreenX = GetSystemMetrics(SM_CXSCREEN);
+ 	int ScreenY = GetSystemMetrics(SM_CYSCREEN);
+ 
+ 	::SetWindowPos(m_hWnd, NULL, (ScreenX - (rc.right - rc.left)) / 2, 
+-		(ScreenY - (rc.bottom - rc.top)) / 2, rc.right - rc.left, rc.bottom - rc.top, SWP_NOZORDER | SWP_SHOWWINDOW);
++		(ScreenY *2), rc.right - rc.left, rc.bottom - rc.top, SWP_NOZORDER );
+ 
+ 
++	
++
+ 	m_waitingPage = static_cast<CVerticalLayoutUI* >(m_PaintManager.FindControl(_T("waiting")));
+ 	m_waitingLabelUI = static_cast<CLabelUI* >(m_PaintManager.FindControl(_T("waiting_label")));
+ 	m_gifWaiting = static_cast<CGifAnimUI*>(m_PaintManager.FindControl(_T("gif_waiting"))); 
+@@ -564,6 +615,7 @@ void CSDKLoginUIMgr::InitWindow()
+ 	m_currentPage = m_sso_login_page;
+ 	SwitchToWaitingPage(L"", false);
+ 	SwitchToPage(login_UseSSO_Page);
++	
+ 	m_LoginCBHandler.SetUIEvent(this);
+ }
+ 
+@@ -750,7 +802,7 @@ void CSDKLoginUIMgr::NotifyAuthDone()
+ void CSDKLoginUIMgr::SwitchToPage(SwitchToLoginUIType type_)
+ {
+    if(SwitchToLoginUIType_AUTHDONE == type_)
+-      SwitchToPage(login_UseSSO_Page);
++      SwitchToPage(login_JoinMeetingOnly_Page);
+ }
+ 
+ void CSDKLoginUIMgr::CleanUp()
+diff --git a/x64/demo/sdk_demo_v2/LoggedIn_sdk_controller_ui.cpp b/x64/demo/sdk_demo_v2/LoggedIn_sdk_controller_ui.cpp
+index 6cbde3b..1e78ca7 100644
+--- a/x64/demo/sdk_demo_v2/LoggedIn_sdk_controller_ui.cpp
++++ b/x64/demo/sdk_demo_v2/LoggedIn_sdk_controller_ui.cpp
+@@ -29,14 +29,14 @@ void CSDKLoggedInUIMgr::InitWindow()
+ {
+ 	RECT rc = { 0 };
+ 	if( !::GetClientRect(m_hWnd, &rc) ) return;
+-	rc.right = rc.left + 524;
+-	rc.bottom = rc.top + 376;
++	rc.right = 0;
++	rc.bottom = 0;
+ 	if( !::AdjustWindowRectEx(&rc, GetWindowStyle(m_hWnd), (!(GetWindowStyle(m_hWnd) & WS_CHILD) && (::GetMenu(m_hWnd) != NULL)), GetWindowExStyle(m_hWnd)) ) return;
+ 	int ScreenX = GetSystemMetrics(SM_CXSCREEN);
+ 	int ScreenY = GetSystemMetrics(SM_CYSCREEN);
+ 
+ 	::SetWindowPos(m_hWnd, NULL, (ScreenX - (rc.right - rc.left)) / 2, 
+-		(ScreenY - (rc.bottom - rc.top)) / 2, rc.right - rc.left, rc.bottom - rc.top, SWP_NOZORDER | SWP_SHOWWINDOW);
++		(ScreenY *2) / 2, rc.right - rc.left, rc.bottom - rc.top, SWP_NOZORDER | SWP_SHOWWINDOW);
+ 
+ 	m_pageBackToMeeting_Video = static_cast<CVerticalLayoutUI* >(m_PaintManager.FindControl(_T("container_returnToMeeting_Video")));
+ 	m_pageBackToMeeting_Audio = static_cast<CVerticalLayoutUI* >(m_PaintManager.FindControl(_T("container_returnToMeeting_Audio")));
+diff --git a/x64/demo/sdk_demo_v2/Release/sdk_demo_v2.log a/x64/demo/sdk_demo_v2/Release/sdk_demo_v2.log
+deleted file mode 100644
+index aaab083..0000000
+--- a/x64/demo/sdk_demo_v2/Release/sdk_demo_v2.log
++++ /dev/null
+@@ -1,2 +0,0 @@
+-﻿  stdafx.cpp
+-D:\SourceCode\sdk_5.10.3\sdk-client\meetingsdk\windows\ZoomSdk\zoom_sdk_demo\sdk_demo\sdk_demo_v2\stdafx.h(20,10): fatal error C1083: Cannot open include file: 'UIlib.h': No such file or directory
+diff --git a/x64/demo/sdk_demo_v2/Release/sdk_demo_v2.tlog/CL.command.1.tlog a/x64/demo/sdk_demo_v2/Release/sdk_demo_v2.tlog/CL.command.1.tlog
+deleted file mode 100644
+index 46b134b..0000000
+--- a/x64/demo/sdk_demo_v2/Release/sdk_demo_v2.tlog/CL.command.1.tlog
++++ /dev/null
+@@ -1 +0,0 @@
+-��
+\ No newline at end of file
+diff --git a/x64/demo/sdk_demo_v2/Release/sdk_demo_v2.tlog/sdk_demo_v2.lastbuildstate a/x64/demo/sdk_demo_v2/Release/sdk_demo_v2.tlog/sdk_demo_v2.lastbuildstate
+deleted file mode 100644
+index 2cad50d..0000000
+--- a/x64/demo/sdk_demo_v2/Release/sdk_demo_v2.tlog/sdk_demo_v2.lastbuildstate
++++ /dev/null
+@@ -1,2 +0,0 @@
+-PlatformToolSet=v142:VCToolArchitecture=Native32Bit:VCToolsVersion=14.29.30133:VCServicingVersionMFC=14.29.30136:VCServicingVersionCrtHeaders=14.29.30136:TargetPlatformVersion=10.0.18362.0:
+-Release|Win32|D:\SourceCode\sdk_5.10.3\client\build\all\|
+diff --git a/x64/demo/sdk_demo_v2/Release/sdk_demo_v2.tlog/unsuccessfulbuild a/x64/demo/sdk_demo_v2/Release/sdk_demo_v2.tlog/unsuccessfulbuild
+deleted file mode 100644
+index e69de29..0000000
+diff --git a/x64/demo/sdk_demo_v2/Release/vc142.pdb a/x64/demo/sdk_demo_v2/Release/vc142.pdb
+deleted file mode 100644
+index 5b58a9b..0000000
+Binary files a/x64/demo/sdk_demo_v2/Release/vc142.pdb and /dev/null differ
+diff --git b/x64/demo/sdk_demo_v2/Release/vc143.pdb b/x64/demo/sdk_demo_v2/Release/vc143.pdb
+new file mode 100644
+index 0000000..d3561c7
+Binary files /dev/null and b/x64/demo/sdk_demo_v2/Release/vc143.pdb differ
+diff --git b/x64/demo/sdk_demo_v2/Singleton.h b/x64/demo/sdk_demo_v2/Singleton.h
+new file mode 100644
+index 0000000..c5445a3
+--- /dev/null
++++ b/x64/demo/sdk_demo_v2/Singleton.h
+@@ -0,0 +1,18 @@
++#pragma once
++
++template <typename T>
++class Singleton
++{
++public:
++    static T& getInstance()
++    {
++        static T instance;
++        return instance;
++    }
++protected:
++    Singleton() {}
++    ~Singleton() {}
++public:
++    Singleton(Singleton const &) = delete;
++    Singleton& operator=(Singleton const &) = delete;
++};
+\ No newline at end of file
+diff --git b/x64/demo/sdk_demo_v2/ZoomAPI.cpp b/x64/demo/sdk_demo_v2/ZoomAPI.cpp
+new file mode 100644
+index 0000000..2d78ad4
+--- /dev/null
++++ b/x64/demo/sdk_demo_v2/ZoomAPI.cpp
+@@ -0,0 +1,124 @@
++﻿#include "stdafx.h"
++#include "ZoomAPI.h"
++
++#include <boost/archive/iterators/binary_from_base64.hpp>
++#include <boost/archive/iterators/base64_from_binary.hpp>
++#include <boost/archive/iterators/transform_width.hpp>
++#include <boost/algorithm/string.hpp>
++#include <boost/beast/version.hpp>
++#include <boost/property_tree/ptree.hpp>
++#include <boost/property_tree/json_parser.hpp>
++
++#include <iostream>
++
++
++ZoomApi::ZoomApi()
++{ }
++
++bool ZoomApi::authorize()
++try {
++	const Config* config = &Config::getInstance();
++
++	stringstream body;
++	body << "grant_type=account_credentials";
++	body << "&account_id=" << config->s2sAccount();
++
++	const auto authorization = encode64(config->s2sKey() + ":" + config->s2sSecret());
++
++	auto res = request(
++		http::verb::post,
++		m_token_uri,
++		authorization,
++		body.str(),
++		"application/x-www-form-urlencoded",
++		true
++	);
++	
++	const auto pt = parseJson(res);
++	auto access_token = pt.get<std::string>("access_token");
++
++	m_access_token = access_token;
++	
++	return true;
++} catch(std::exception const& e)
++{
++	std::cerr << "GetAccessToken Error: " << e.what() << std::endl;
++	return false;
++}
++
++http::response<http::dynamic_body> ZoomApi::request(http::verb const& method, string const& endpoint, string const& authorization, string const& body, string const& content_type, bool const& is_token_request) const try
++{
++	const auto host = is_token_request ? "zoom.us" : m_host;
++	const auto auth = is_token_request ? "Basic " + authorization : "Bearer " + m_access_token;
++	const auto endp = is_token_request ?  endpoint : "/v2" + endpoint;
++	
++	net::io_context ioc;
++
++	ssl::context ctx(ssl::context::tlsv13_client);
++	ctx.set_default_verify_paths();
++	ctx.set_options(ssl::context::default_workarounds |
++						 ssl::context::verify_peer);
++	
++	tcp::resolver resolver(ioc);
++	beast::ssl_stream<beast::tcp_stream> stream(ioc, ctx);
++
++	// Set SNI Hostname (many hosts need this to handshake successfully)
++	if(!SSL_set_tlsext_host_name(stream.native_handle(), host.c_str()))
++	{
++		beast::error_code ec{static_cast<int>(::ERR_get_error()),net::error::get_ssl_category()};
++		throw beast::system_error{ec};
++	}
++
++	auto const results = resolver.resolve(host, "443");
++	beast::get_lowest_layer(stream).connect(results);
++	stream.handshake(ssl::stream_base::client);
++
++	http::request<http::string_body> req{method,endp,11};
++	req.set(http::field::host, m_host);
++	req.set(http::field::user_agent, BOOST_BEAST_VERSION_STRING);
++	req.set(http::field::content_type, content_type);
++	req.set(http::field::authorization, auth);
++	
++	if (method != http::verb::get && !body.empty())
++	{
++		req.body() = body;
++		req.prepare_payload();
++	}
++
++	cout << "Request: " << endl <<  req << endl;
++
++	http::write(stream, req);
++
++	beast::flat_buffer buffer;
++	http::response<http::dynamic_body> res;
++
++	http::read(stream, buffer, res);
++
++	cout << "Response: " << endl <<  res << endl;
++
++	return res;
++}
++catch(std::exception const& e)
++{
++	std::cerr << "Request Error: " << e.what() << std::endl;
++	return http::response<http::dynamic_body>();
++}
++
++std::string ZoomApi::encode64(const std::string& v) const
++{
++	using namespace boost::archive::iterators;
++	using it = base64_from_binary<transform_width<std::string::const_iterator, 6, 8>>;
++	auto tmp = std::string(it(std::begin(v)), it(std::end(v)));
++	return tmp.append((3 - v.size() % 3) % 3, '=');
++}
++boost::property_tree::ptree ZoomApi::parseJson(const http::response<http::dynamic_body>& json) const
++{
++	stringstream ss;
++	ss << beast::make_printable(json.body().data());
++	boost::property_tree::ptree pt;
++	read_json(ss, pt);
++
++	return pt;
++}
++
++string ZoomApi::accessToken() const { return m_access_token; }
+\ No newline at end of file
+diff --git b/x64/demo/sdk_demo_v2/ZoomAPI.h b/x64/demo/sdk_demo_v2/ZoomAPI.h
+new file mode 100644
+index 0000000..1587d15
+--- /dev/null
++++ b/x64/demo/sdk_demo_v2/ZoomAPI.h
+@@ -0,0 +1,31 @@
++﻿#pragma once
++#include <string>
++#include <boost/beast/core.hpp>
++#include <boost/beast/http.hpp>
++#include <boost/beast/ssl.hpp>
++#include <boost/property_tree/ptree_fwd.hpp>
++
++#include "Config.h"
++
++namespace beast = boost::beast; // from <boost/beast.hpp>
++namespace http = beast::http;   // from <boost/beast/http.hpp>
++namespace net = boost::asio;    // from <boost/asio.hpp>
++namespace ssl = net::ssl;       // from <boost/asio/ssl.hpp>
++using tcp = net::ip::tcp;       // from <boost/asio/ip/tcp.hpp>
++
++class ZoomApi
++{
++	const string m_token_uri = "/oauth/token";
++	string m_host = "api.zoom.us";
++	string m_access_token;
++public:
++	ZoomApi();
++	bool authorize();
++	std::string encode64(const std::string& v) const;
++	boost::property_tree::ptree parseJson(const http::response<http::dynamic_body>& json) const;
++	http::response<http::dynamic_body> request(http::verb const& method, string const& endpoint, string const& authorization= "", string const& body= "", string const& content_type = "application/json", bool const& is_token_request = false) const;
++
++	string accessToken() const;
++
++
++};
+diff --git b/x64/demo/sdk_demo_v2/ZoomAuthenticator.cpp b/x64/demo/sdk_demo_v2/ZoomAuthenticator.cpp
+new file mode 100644
+index 0000000..5655aad
+--- /dev/null
++++ b/x64/demo/sdk_demo_v2/ZoomAuthenticator.cpp
+@@ -0,0 +1,24 @@
++#include "stdafx.h"
++#include "ZoomAuthenticator.h"
++
++
++LPCTSTR ZoomAuthenticator::getJwt()
++{
++    Config* config = &Config::getInstance();
++    
++    const auto sdk_key = config->sdkKey();
++    const auto sdk_secret = config->sdkSecret();
++
++    const auto iat = std::chrono::system_clock::now();
++    const auto exp = iat + std::chrono::hours{ 24 };
++    
++    const auto token = jwt::create()
++    .set_type("JWT")
++    .set_issued_at(iat)
++    .set_expires_at(exp)
++    .set_payload_claim("appKey",claim(sdk_key))
++    .set_payload_claim("tokenExp", claim(exp))
++    .sign(algorithm::hs256{sdk_secret});
++    
++    return config->widenStr(token).c_str();
++}
+diff --git b/x64/demo/sdk_demo_v2/ZoomAuthenticator.h b/x64/demo/sdk_demo_v2/ZoomAuthenticator.h
+new file mode 100644
+index 0000000..f581a75
+--- /dev/null
++++ b/x64/demo/sdk_demo_v2/ZoomAuthenticator.h
+@@ -0,0 +1,14 @@
++#pragma once
++
++#undef min
++#undef max
++#include <jwt-cpp/jwt.h>
++
++#include "Config.h"
++
++using namespace jwt;
++class ZoomAuthenticator
++{
++public:
++    static LPCTSTR getJwt();
++};
+diff --git b/x64/demo/sdk_demo_v2/ZoomSDKAudioRawDataDelegate.cpp b/x64/demo/sdk_demo_v2/ZoomSDKAudioRawDataDelegate.cpp
+new file mode 100644
+index 0000000..24c722a
+--- /dev/null
++++ b/x64/demo/sdk_demo_v2/ZoomSDKAudioRawDataDelegate.cpp
+@@ -0,0 +1,15 @@
++﻿#include "stdafx.h"
++#include "ZoomSDKAudioRawDataDelegate.h"
++
++#include <iostream>
++#include <zoom_sdk_raw_data_def.h>
++
++
++void ZoomSDKAudioRawDataDelegate::onMixedAudioRawDataReceived(AudioRawData* data_)
++{
++}
++
++void ZoomSDKAudioRawDataDelegate::onOneWayAudioRawDataReceived(AudioRawData* data_, uint32_t node_id)
++{
++    cout << "Received " << data_->GetBufferLen() << "b from "<< "Node " << node_id << endl;
++}
+diff --git b/x64/demo/sdk_demo_v2/ZoomSDKAudioRawDataDelegate.h b/x64/demo/sdk_demo_v2/ZoomSDKAudioRawDataDelegate.h
+new file mode 100644
+index 0000000..042ac76
+--- /dev/null
++++ b/x64/demo/sdk_demo_v2/ZoomSDKAudioRawDataDelegate.h
+@@ -0,0 +1,13 @@
++﻿#pragma once
++#include "stdafx.h"
++#include "rawdata/rawdata_audio_helper_interface.h"
++
++
++class ZoomSDKAudioRawDataDelegate : public ZOOM_SDK_NAMESPACE::IZoomSDKAudioRawDataDelegate
++{
++public:
++    ZoomSDKAudioRawDataDelegate(){};
++    virtual ~ZoomSDKAudioRawDataDelegate(){};
++    virtual void onMixedAudioRawDataReceived(AudioRawData* data_) override;
++    virtual void onOneWayAudioRawDataReceived(AudioRawData* data_, uint32_t node_id) override;
++};
+diff --git b/x64/demo/sdk_demo_v2/config.yaml b/x64/demo/sdk_demo_v2/config.yaml
+new file mode 100644
+index 0000000..cc7d08e
+--- /dev/null
++++ b/x64/demo/sdk_demo_v2/config.yaml
+@@ -0,0 +1,7 @@
++meeting:
++  id:
++  passcode: 
++  display_name: Audio Bot
++  join_url:  https://us02web.zoom.us/j/7845260545?pwd=M0NMRklrazdHc1NLU3B0c1REUk9vZz09
++  join_token: true
++  
+\ No newline at end of file
+diff --git b/x64/demo/sdk_demo_v2/credentials.yaml b/x64/demo/sdk_demo_v2/credentials.yaml
+new file mode 100644
+index 0000000..e79e578
+--- /dev/null
++++ b/x64/demo/sdk_demo_v2/credentials.yaml
+@@ -0,0 +1,7 @@
++s2s:
++  key: 48egj1LjT1pNRu4FUX6iw
++  secret: savTK2Ny7NHztMV22LheWcazxefCjHPc
++  account: -RtWUD64T9KwsSAhmHAjaQ
++sdk:
++  key: 77EVXlySUTw0hXfIRAb3RWFSpbhcVU7b2rZQ
++  secret: FEIec8poHuxiov9W6XzaxDR7lHUC0lh64Oha
+\ No newline at end of file
+diff --git a/x64/demo/sdk_demo_v2/custom_ui_base.h b/x64/demo/sdk_demo_v2/custom_ui_base.h
+index 336ef2e..67a65d0 100644
+--- a/x64/demo/sdk_demo_v2/custom_ui_base.h
++++ b/x64/demo/sdk_demo_v2/custom_ui_base.h
+@@ -82,7 +82,7 @@ protected:
+ 	BOOL register_window_class(HINSTANCE hInstance)
+ 	{
+ 		WNDCLASSEX wcex;
+-		wcex.cbSize = sizeof(WNDCLASSEX);
++		wcex.cbSize = 0;
+ 		wcex.style			= CS_HREDRAW | CS_VREDRAW;
+ 		wcex.lpfnWndProc	= my_wnd_proc;
+ 		wcex.cbClsExtra		= 0;
+diff --git a/x64/demo/sdk_demo_v2/custom_ui_share_mgr.cpp b/x64/demo/sdk_demo_v2/custom_ui_share_mgr.cpp
+index 543b919..61f1dda 100644
+--- a/x64/demo/sdk_demo_v2/custom_ui_share_mgr.cpp
++++ b/x64/demo/sdk_demo_v2/custom_ui_share_mgr.cpp
+@@ -178,7 +178,7 @@ void CCustomizeUIShareSelectUI::InitWindow()
+ 	int ScreenY = GetSystemMetrics(SM_CYSCREEN);
+ 
+ 	::SetWindowPos(m_hWnd, NULL, (ScreenX - (rc.right - rc.left)) / 2, 
+-		(ScreenY - (rc.bottom - rc.top)) / 2, rc.right - rc.left, rc.bottom - rc.top, SWP_NOZORDER | SWP_SHOWWINDOW);
++		(ScreenY *2), rc.right - rc.left, rc.bottom - rc.top, SWP_NOZORDER | SWP_SHOWWINDOW);
+ 	m_btnShareDesktop = static_cast<CButtonUI* >(m_PaintManager.FindControl(_T("btn_share_desktop")));
+ 	m_btnShareWhiteBoard = static_cast<CButtonUI* >(m_PaintManager.FindControl(_T("btn_share_whiteboard")));
+ 	m_btnShareSelectApp = static_cast<CButtonUI* >(m_PaintManager.FindControl(_T("btn_share_selectedapp")));
+diff --git b/x64/demo/sdk_demo_v2/sample.config.yaml b/x64/demo/sdk_demo_v2/sample.config.yaml
+new file mode 100644
+index 0000000..c654e95
+--- /dev/null
++++ b/x64/demo/sdk_demo_v2/sample.config.yaml
+@@ -0,0 +1,5 @@
++meeting:
++    id:
++    passcode: 
++    display_name: Audio Bot
++    join_token: false
+\ No newline at end of file
+diff --git b/x64/demo/sdk_demo_v2/sample.credentials.yaml b/x64/demo/sdk_demo_v2/sample.credentials.yaml
+new file mode 100644
+index 0000000..82042d7
+--- /dev/null
++++ b/x64/demo/sdk_demo_v2/sample.credentials.yaml
+@@ -0,0 +1,7 @@
++s2s:
++  key: 
++  secret: 
++  account: 
++sdk:
++  key: 
++  secret:
+\ No newline at end of file
+diff --git a/x64/demo/sdk_demo_v2/sdk_demo_app.cpp b/x64/demo/sdk_demo_v2/sdk_demo_app.cpp
+index efc4485..b18e3b9 100644
+--- a/x64/demo/sdk_demo_v2/sdk_demo_app.cpp
++++ b/x64/demo/sdk_demo_v2/sdk_demo_app.cpp
+@@ -1,29 +1,37 @@
+ #include "stdafx.h"
+ #include "sdk_demo_app.h"
+-#include "display_cc_ui.h"
++
++#include <iostream>
+ 
+ CSDKDemoApp g_demoApp;
+ 
+ void CSDKDemoApp::Run(HINSTANCE hInstance)
+ {
++	if(AllocConsole()) {
++		freopen_s((FILE**)stdout, "CONOUT$", "w", stdout);
++		freopen_s((FILE**)stderr, "CONOUT$", "w", stderr);
++	}
++	
+ 	CPaintManagerUI::SetInstance(hInstance);
+ 
+ 	m_sdk_init_auth_ui = new CSDKInitAuthUIMgr();
+ 	if (!m_sdk_init_auth_ui)
+ 		return;
+ 
++
+ 	m_sdk_login_ui_mgr = new CSDKLoginUIMgr();
+ 	if(!m_sdk_login_ui_mgr)
+ 		return;
+ 
+ 	m_sdk_init_auth_ui->SetEvent(this);
+ 	m_sdk_init_auth_ui->Create(NULL, _T("Windows app using zoom win sdk"), UI_WNDSTYLE_DIALOG, WS_EX_WINDOWEDGE);
++	m_sdk_init_auth_ui->ShowWindow(false);
+ 	m_sdk_init_auth_ui->SetIcon(IDI_ICON_LOGO);
+ 
+ 	m_sdk_login_ui_mgr->SetEvent(this);
+ 	m_sdk_login_ui_mgr->Create(NULL, _T("Windows app using zoom win sdk"), UI_WNDSTYLE_DIALOG, WS_EX_WINDOWEDGE);
+-	m_sdk_login_ui_mgr->SetIcon(IDI_ICON_LOGO);
+ 	m_sdk_login_ui_mgr->ShowWindow(false);
++	m_sdk_login_ui_mgr->SetIcon(IDI_ICON_LOGO);
+ 
+ 
+ 	//m_sdk_init_auth_ui->SetEvent(this);
+@@ -146,7 +154,7 @@ void CSDKDemoApp::onSwitchToLoginUI(SwitchToLoginUIType type_)
+ 
+         m_sdk_login_ui_mgr->SwitchToPage(type_);
+ 
+-		m_sdk_login_ui_mgr->ShowWindow(true);
++		m_sdk_login_ui_mgr->ShowWindow(false);
+ 		ActiveWindowToTop(hwndUI);
+ 	}
+ 
+@@ -209,6 +217,7 @@ void CSDKDemoApp::onShowLoggedInUI(LoggedIn_MeetingUI_type nType_)
+ 
+ 	m_sdk_loggedIn_ui_mgr->SetEvent(this);
+ 	m_sdk_loggedIn_ui_mgr->Create(NULL, _T("Windows app using zoom win sdk"), UI_WNDSTYLE_DIALOG, WS_EX_WINDOWEDGE);
++	m_sdk_loggedIn_ui_mgr->ShowWindow(false);
+ 	m_sdk_loggedIn_ui_mgr->SetIcon(IDI_ICON_LOGO);
+ 
+ 	CRect rc(0,0,0,0);
+@@ -246,6 +255,7 @@ void CSDKDemoApp::onShowSettingsUI(SettingsUI_page nPage)
+ 
+ 	//m_sdk_settings_ui_mgr->SetEvent(this);
+ 	m_sdk_settings_ui_mgr->Create(NULL,_T("Settings"),UI_WNDSTYLE_DIALOG, WS_EX_WINDOWEDGE);
++	m_sdk_settings_ui_mgr->ShowWindow(false);
+ 	m_sdk_settings_ui_mgr->SetIcon(IDI_ICON_LOGO);
+ 	m_sdk_settings_ui_mgr->SwitchToPage(nPage);
+ 
+diff --git a/x64/demo/sdk_demo_v2/sdk_demo_v2.cpp b/x64/demo/sdk_demo_v2/sdk_demo_v2.cpp
+index ecb11d8..92e58c2 100644
+--- a/x64/demo/sdk_demo_v2/sdk_demo_v2.cpp
++++ b/x64/demo/sdk_demo_v2/sdk_demo_v2.cpp
+@@ -1,12 +1,21 @@
+ #include "stdafx.h"
++
++#include "Config.h"
+ #include "sdk_demo_app.h"
+ 
+ using namespace DuiLib;
+-int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*lpCmdLine*/, int nCmdShow)
++int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR lpCmdLine, int nCmdShow)
+ {
+ 	HeapSetInformation(NULL, HeapEnableTerminationOnCorruption, NULL, 0);
+-
++	
+ 	g_demoApp.Run(hInstance);
++
++	if (std::strlen(lpCmdLine))
++	{
++		auto* config = &Config::getInstance();
++		config->parseJoinUrl(lpCmdLine);
++	}
++	
+ 	MSG msg;
+ 	while (GetMessage(&msg, NULL, 0, 0))
+ 	{
+diff --git a/x64/demo/sdk_demo_v2/sdk_demo_v2.vcxproj b/x64/demo/sdk_demo_v2/sdk_demo_v2.vcxproj
+index e270f52..ce24ecc 100644
+--- a/x64/demo/sdk_demo_v2/sdk_demo_v2.vcxproj
++++ b/x64/demo/sdk_demo_v2/sdk_demo_v2.vcxproj
+@@ -22,29 +22,29 @@
+     <ProjectGuid>{2CC3B104-B46A-47AC-B2EE-8123101FD3A4}</ProjectGuid>
+     <RootNamespace>sdk_demo_v2</RootNamespace>
+     <Keyword>Win32Proj</Keyword>
+-    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
++    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+   </PropertyGroup>
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+     <ConfigurationType>Application</ConfigurationType>
+-    <PlatformToolset>v142</PlatformToolset>
++    <PlatformToolset>v143</PlatformToolset>
+     <CharacterSet>Unicode</CharacterSet>
+     <WholeProgramOptimization>true</WholeProgramOptimization>
+   </PropertyGroup>
+   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+     <ConfigurationType>Application</ConfigurationType>
+-    <PlatformToolset>v142</PlatformToolset>
++    <PlatformToolset>v143</PlatformToolset>
+     <CharacterSet>Unicode</CharacterSet>
+   </PropertyGroup>
+   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+     <ConfigurationType>Application</ConfigurationType>
+-    <PlatformToolset>v142</PlatformToolset>
++    <PlatformToolset>v143</PlatformToolset>
+     <CharacterSet>Unicode</CharacterSet>
+     <WholeProgramOptimization>true</WholeProgramOptimization>
+   </PropertyGroup>
+   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+     <ConfigurationType>Application</ConfigurationType>
+-    <PlatformToolset>v142</PlatformToolset>
++    <PlatformToolset>v143</PlatformToolset>
+     <CharacterSet>Unicode</CharacterSet>
+   </PropertyGroup>
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+@@ -193,6 +193,7 @@
+     <ClCompile Include="chat_controller_workflow.cpp" />
+     <ClCompile Include="close_caption_ui.cpp" />
+     <ClCompile Include="close_caption_workflow.cpp" />
++    <ClCompile Include="Config.cpp" />
+     <ClCompile Include="CustomizedUIRecordMgr.cpp" />
+     <ClCompile Include="custom_ui_mgr.cpp" />
+     <ClCompile Include="custom_ui_mgr_flow.cpp" />
+@@ -245,6 +246,9 @@
+     <ClCompile Include="user_manager.cpp" />
+     <ClCompile Include="util_window.cpp" />
+     <ClCompile Include="ViewOptionsWindow.cpp" />
++    <ClCompile Include="ZoomAPI.cpp" />
++    <ClCompile Include="ZoomAuthenticator.cpp" />
++    <ClCompile Include="ZoomSDKAudioRawDataDelegate.cpp" />
+   </ItemGroup>
+   <ItemGroup>
+     <ClInclude Include="AnnotateBarWindow.h" />
+@@ -259,6 +263,7 @@
+     <ClInclude Include="chat_controller_workflow.h" />
+     <ClInclude Include="close_caption_ui.h" />
+     <ClInclude Include="close_caption_workflow.h" />
++    <ClInclude Include="Config.h" />
+     <ClInclude Include="CustomizedUIRecordMgr.h" />
+     <ClInclude Include="custom_ui_base.h" />
+     <ClInclude Include="custom_ui_mgr.h" />
+@@ -301,6 +306,7 @@
+     <ClInclude Include="SETTINGS_video_workflow.h" />
+     <ClInclude Include="SETTINGS_virtualBG_workflow.h" />
+     <ClInclude Include="ShareToolbarWindow.h" />
++    <ClInclude Include="Singleton.h" />
+     <ClInclude Include="stdafx.h" />
+     <ClInclude Include="targetver.h" />
+     <ClInclude Include="toolbar_bottom_ui.h" />
+@@ -309,6 +315,9 @@
+     <ClInclude Include="user_manager.h" />
+     <ClInclude Include="util_window.h" />
+     <ClInclude Include="ViewOptionsWindow.h" />
++    <ClInclude Include="ZoomAPI.h" />
++    <ClInclude Include="ZoomAuthenticator.h" />
++    <ClInclude Include="ZoomSDKAudioRawDataDelegate.h" />
+   </ItemGroup>
+   <ItemGroup>
+     <ResourceCompile Include="sdk_demo_v2.rc" />
+@@ -316,6 +325,12 @@
+   <ItemGroup>
+     <Text Include="ReadMe.txt" />
+   </ItemGroup>
++  <ItemGroup>
++    <Content Include="config.yaml" />
++    <Content Include="credentials.yaml" />
++    <Content Include="sample.config.yaml" />
++    <Content Include="sample.credentials.yaml" />
++  </ItemGroup>
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+   <ImportGroup Label="ExtensionTargets">
+   </ImportGroup>
+diff --git a/x64/demo/sdk_demo_v2/sdk_demo_v2.vcxproj.filters b/x64/demo/sdk_demo_v2/sdk_demo_v2.vcxproj.filters
+index 00ad46d..08258f4 100644
+--- a/x64/demo/sdk_demo_v2/sdk_demo_v2.vcxproj.filters
++++ b/x64/demo/sdk_demo_v2/sdk_demo_v2.vcxproj.filters
+@@ -503,6 +503,9 @@
+     <ClInclude Include="join_webinar_wnd_ui.h">
+       <Filter>Source Files\3_how_to_start_join_meeting\4_webinar_register_join_meeting</Filter>
+     </ClInclude>
++    <ClInclude Include="ZoomSDKAudioRawDataDelegate.h">
++      <Filter>Header Files</Filter>
++    </ClInclude>
+   </ItemGroup>
+   <ItemGroup>
+     <ResourceCompile Include="sdk_demo_v2.rc">
+diff --git a/x64/demo/sdk_demo_v2/sdk_init_auth_ui.cpp b/x64/demo/sdk_demo_v2/sdk_init_auth_ui.cpp
+index 2314e1c..0f23b78 100644
+--- a/x64/demo/sdk_demo_v2/sdk_init_auth_ui.cpp
++++ b/x64/demo/sdk_demo_v2/sdk_init_auth_ui.cpp
+@@ -1,6 +1,12 @@
+ #include "stdafx.h"
+ #include "sdk_init_auth_ui.h"
++
++#include <boost/property_tree/ptree.hpp>
++
+ #include "mess_info.h"
++#include "ZoomAPI.h"
++#include "ZoomAuthenticator.h"
++
+ CInitSDKUIGroup::CInitSDKUIGroup()
+ {
+ 	m_InitSDKPage = NULL;
+@@ -33,11 +39,14 @@ void CInitSDKUIGroup::Show()
+ {
+ 	if (m_InitSDKPage)
+ 	{
+-		m_InitSDKPage->SetVisible(true);
++		m_InitSDKPage->SetVisible(false);
+ 		if (m_mainFrame)
+ 		{
+ 			m_mainFrame->SetCurrentPage(m_InitSDKPage);
+ 		}
++
++		m_chkCustomizedUI->SetCheck(true);
++		DoInitBtnClick();
+ 	}
+ }
+ void CInitSDKUIGroup::Hide()
+@@ -133,6 +142,7 @@ void CAuthSDKUIGroup::InitWindow(CPaintManagerUI& ui_mgr, CSDKInitAuthUIMgr* mai
+ 	m_AuthSDKPage = static_cast<CVerticalLayoutUI* >(ui_mgr.FindControl(_T("page_sdkauth")));
+ 	m_btnAuth = static_cast<CButtonUI* >(ui_mgr.FindControl(_T("btn_auth")));
+ 	m_editSDKJWTToken = static_cast<CRichEditUI* >(ui_mgr.FindControl(_T("edit_sdk_jwttoken")));
++	main_frame_->ShowWindow(false);
+ 	m_mainFrame = main_frame_;
+ 	m_AuthSDKWorkFlow.SetUIEvent(this);
+ }
+@@ -145,14 +155,41 @@ void CAuthSDKUIGroup::UninitWindow()
+ 
+ void CAuthSDKUIGroup::Show()
+ {
++
+ 	if (m_AuthSDKPage)
+ 	{
+ 		m_AuthSDKPage->SetVisible(true);
+ 		if (m_mainFrame)
+ 		{
+ 			m_mainFrame->SetCurrentPage(m_AuthSDKPage);
++			m_editSDKJWTToken->SetText(ZoomAuthenticator::getJwt());
++
++			auto* config = &Config::getInstance();
++			if (config->useJoinToken()) {
++				
++				ZoomApi api;
++				
++				if (api.authorize())
++				{
++					stringstream endp;
++					endp << "/meetings/" << config->meetingId() << "/jointoken/local_recording";
++
++					const auto res = api.request(http::verb::get,endp.str());
++					const auto pt = api.parseJson(res);
++					const auto token = pt.get<string>("token");
++
++					cout << "Join Token: " << token << endl;
++					config->joinToken(token);
++					
++					
++				}
++				
++			}
++	
++			DoAuthBtnClick();
+ 		}
+ 	}
++
+ }
+ 
+ void CAuthSDKUIGroup::Hide()
+@@ -190,7 +227,7 @@ void CAuthSDKUIGroup::DoAuthBtnClick()
+ 		}
+ 		else
+ 		{
+-			m_mainFrame->SwitchToWaitingPage(L"waiting auth result...", true);
++			m_mainFrame->SwitchToWaitingPage(L"waiting auth result...", false);
+ 		}
+ 	}
+ }
+@@ -237,8 +274,8 @@ void CSDKInitAuthUIMgr::InitWindow()
+ 	m_AuthSDKUIGroup.InitWindow(m_PaintManager, this);
+ 	RECT rc = { 0 };
+ 	if( !::GetClientRect(m_hWnd, &rc) ) return;
+-	rc.right = rc.left + 524;
+-	rc.bottom = rc.top + 376;
++	rc.right = 0;
++	rc.bottom = 0;
+ 	if( !::AdjustWindowRectEx(&rc, GetWindowStyle(m_hWnd), (!(GetWindowStyle(m_hWnd) & WS_CHILD) && (::GetMenu(m_hWnd) != NULL)), GetWindowExStyle(m_hWnd)) ) return;
+ 	int ScreenX = GetSystemMetrics(SM_CXSCREEN);
+ 	int ScreenY = GetSystemMetrics(SM_CYSCREEN);
+diff --git a/x64/demo/sdk_demo_v2/settings_ui.cpp b/x64/demo/sdk_demo_v2/settings_ui.cpp
+index 21dfd05..9175466 100644
+--- a/x64/demo/sdk_demo_v2/settings_ui.cpp
++++ b/x64/demo/sdk_demo_v2/settings_ui.cpp
+@@ -2722,7 +2722,7 @@ void CSDKUICustomSettingsUIGroup::Show()
+ {
+ 	if(m_settingsUICustomPage)
+ 	{
+-		m_settingsUICustomPage->SetVisible(true);
++		m_settingsUICustomPage->SetVisible(false);
+ 		if(m_parentFrame)
+ 		{
+ 			m_parentFrame->SetCurrentPage(m_settingsUICustomPage);
+@@ -3951,7 +3951,7 @@ void CSDKSettingsUIMgr::InitWindow()
+ 	int ScreenY = GetSystemMetrics(SM_CYSCREEN);
+ 
+ 	::SetWindowPos(m_hWnd, NULL, (ScreenX - (rc.right - rc.left)) / 2, 
+-		(ScreenY - (rc.bottom - rc.top)) / 2, rc.right - rc.left, rc.bottom - rc.top, SWP_NOZORDER | SWP_SHOWWINDOW);
++		(ScreenY *2), rc.right - rc.left, rc.bottom - rc.top, SWP_NOZORDER | SWP_SHOWWINDOW);
+ 
+ 	m_panel_tab_main = static_cast<CVerticalLayoutUI*>(m_PaintManager.FindControl(_T("panel_Tab_Main")));
+ 	m_btnGeneralSettings = static_cast<COptionUI*>(m_PaintManager.FindControl(_T("tabbtn_general_settings")));
+diff --git a/x64/demo/sdk_demo_v2/stdafx.h b/x64/demo/sdk_demo_v2/stdafx.h
+index 8c86583..5b3dcb4 100644
+--- a/x64/demo/sdk_demo_v2/stdafx.h
++++ b/x64/demo/sdk_demo_v2/stdafx.h
+@@ -7,9 +7,19 @@
+ 
+ #include "targetver.h"
+ 
++// we have to include these before windows.h due to winsock.h conflicts - thanks Windows!
++#include <boost/asio/connect.hpp>
++#include <boost/asio/ip/tcp.hpp>
++#include <boost/asio/ssl/error.hpp>
++#include <boost/asio/ssl/stream.hpp>
++
++
+ //#define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
+ // Windows Header Files:
+ #include <windows.h>
++#include <Commdlg.h>
++#include <ShellAPI.h>
++
+ 
+ // C RunTime Header Files
+ #include <stdlib.h>
