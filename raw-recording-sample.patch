@@ -2,10 +2,6 @@ diff --git a/x64/.DS_Store a/x64/.DS_Store
 deleted file mode 100644
 index 8067953..0000000
 Binary files a/x64/.DS_Store and /dev/null differ
-diff --git b/x64/bin/boost_url-vc143-mt-x64-1_82.dll b/x64/bin/boost_url-vc143-mt-x64-1_82.dll
-new file mode 100644
-index 0000000..2a89666
-Binary files /dev/null and b/x64/bin/boost_url-vc143-mt-x64-1_82.dll differ
 diff --git b/x64/bin/libcrypto-3-x64.dll b/x64/bin/libcrypto-3-x64.dll
 new file mode 100644
 index 0000000..20bad4f
@@ -24,7 +20,7 @@ index 3717abb..0000000
 Binary files a/x64/demo/.DS_Store and /dev/null differ
 diff --git b/x64/demo/sdk_demo_v2/Config.cpp b/x64/demo/sdk_demo_v2/Config.cpp
 new file mode 100644
-index 0000000..5813c70
+index 0000000..c934da3
 --- /dev/null
 +++ b/x64/demo/sdk_demo_v2/Config.cpp
 @@ -0,0 +1,84 @@
@@ -115,7 +111,7 @@ index 0000000..5813c70
 \ No newline at end of file
 diff --git b/x64/demo/sdk_demo_v2/Config.h b/x64/demo/sdk_demo_v2/Config.h
 new file mode 100644
-index 0000000..bcd0c1a
+index 0000000..0016b09
 --- /dev/null
 +++ b/x64/demo/sdk_demo_v2/Config.h
 @@ -0,0 +1,57 @@
@@ -177,7 +173,7 @@ index 0000000..bcd0c1a
 +    wstring widenStr(string str);
 +};
 diff --git a/x64/demo/sdk_demo_v2/CustomizedUIRecordMgr.cpp b/x64/demo/sdk_demo_v2/CustomizedUIRecordMgr.cpp
-index 4cce4d9..2250096 100644
+index f1401e2..9dbbba6 100644
 --- a/x64/demo/sdk_demo_v2/CustomizedUIRecordMgr.cpp
 +++ b/x64/demo/sdk_demo_v2/CustomizedUIRecordMgr.cpp
 @@ -1,6 +1,10 @@
@@ -212,7 +208,7 @@ index 4cce4d9..2250096 100644
  		::MessageBox(NULL, _T("you can not record now."), _T("winsdk demo"), MB_OK);
  }
 diff --git a/x64/demo/sdk_demo_v2/Join_meeting_for_login_user_ui.cpp b/x64/demo/sdk_demo_v2/Join_meeting_for_login_user_ui.cpp
-index f142607..e2cdb06 100644
+index 77bc14f..7b65b9f 100644
 --- a/x64/demo/sdk_demo_v2/Join_meeting_for_login_user_ui.cpp
 +++ b/x64/demo/sdk_demo_v2/Join_meeting_for_login_user_ui.cpp
 @@ -157,14 +157,14 @@ void CSDKJoinMeetingForLoginUserUIMgr::InitWindow()
@@ -234,7 +230,7 @@ index f142607..e2cdb06 100644
  void CSDKJoinMeetingForLoginUserUIMgr::Notify( TNotifyUI& msg )
  {
 diff --git a/x64/demo/sdk_demo_v2/LOGIN_sdk_login_UI.cpp b/x64/demo/sdk_demo_v2/LOGIN_sdk_login_UI.cpp
-index 47d8c8c..8c4068e 100644
+index c8ec3c2..f194ea9 100644
 --- a/x64/demo/sdk_demo_v2/LOGIN_sdk_login_UI.cpp
 +++ b/x64/demo/sdk_demo_v2/LOGIN_sdk_login_UI.cpp
 @@ -1,8 +1,12 @@
@@ -389,7 +385,7 @@ index 47d8c8c..8c4068e 100644
  
  void CSDKLoginUIMgr::CleanUp()
 diff --git a/x64/demo/sdk_demo_v2/LoggedIn_sdk_controller_ui.cpp b/x64/demo/sdk_demo_v2/LoggedIn_sdk_controller_ui.cpp
-index 6cbde3b..1e78ca7 100644
+index 1e39acb..ac60b8c 100644
 --- a/x64/demo/sdk_demo_v2/LoggedIn_sdk_controller_ui.cpp
 +++ b/x64/demo/sdk_demo_v2/LoggedIn_sdk_controller_ui.cpp
 @@ -29,14 +29,14 @@ void CSDKLoggedInUIMgr::InitWindow()
@@ -412,7 +408,7 @@ index 6cbde3b..1e78ca7 100644
  	m_pageBackToMeeting_Audio = static_cast<CVerticalLayoutUI* >(m_PaintManager.FindControl(_T("container_returnToMeeting_Audio")));
 diff --git a/x64/demo/sdk_demo_v2/Release/sdk_demo_v2.log a/x64/demo/sdk_demo_v2/Release/sdk_demo_v2.log
 deleted file mode 100644
-index aaab083..0000000
+index 9538397..0000000
 --- a/x64/demo/sdk_demo_v2/Release/sdk_demo_v2.log
 +++ /dev/null
 @@ -1,2 +0,0 @@
@@ -428,7 +424,7 @@ index 46b134b..0000000
 \ No newline at end of file
 diff --git a/x64/demo/sdk_demo_v2/Release/sdk_demo_v2.tlog/sdk_demo_v2.lastbuildstate a/x64/demo/sdk_demo_v2/Release/sdk_demo_v2.tlog/sdk_demo_v2.lastbuildstate
 deleted file mode 100644
-index 2cad50d..0000000
+index a1517a3..0000000
 --- a/x64/demo/sdk_demo_v2/Release/sdk_demo_v2.tlog/sdk_demo_v2.lastbuildstate
 +++ /dev/null
 @@ -1,2 +0,0 @@
@@ -447,7 +443,7 @@ index 0000000..d3561c7
 Binary files /dev/null and b/x64/demo/sdk_demo_v2/Release/vc143.pdb differ
 diff --git b/x64/demo/sdk_demo_v2/Singleton.h b/x64/demo/sdk_demo_v2/Singleton.h
 new file mode 100644
-index 0000000..c5445a3
+index 0000000..c09f725
 --- /dev/null
 +++ b/x64/demo/sdk_demo_v2/Singleton.h
 @@ -0,0 +1,18 @@
@@ -472,7 +468,7 @@ index 0000000..c5445a3
 \ No newline at end of file
 diff --git b/x64/demo/sdk_demo_v2/ZoomAPI.cpp b/x64/demo/sdk_demo_v2/ZoomAPI.cpp
 new file mode 100644
-index 0000000..2d78ad4
+index 0000000..9278cac
 --- /dev/null
 +++ b/x64/demo/sdk_demo_v2/ZoomAPI.cpp
 @@ -0,0 +1,124 @@
@@ -603,7 +599,7 @@ index 0000000..2d78ad4
 \ No newline at end of file
 diff --git b/x64/demo/sdk_demo_v2/ZoomAPI.h b/x64/demo/sdk_demo_v2/ZoomAPI.h
 new file mode 100644
-index 0000000..1587d15
+index 0000000..7fe67c4
 --- /dev/null
 +++ b/x64/demo/sdk_demo_v2/ZoomAPI.h
 @@ -0,0 +1,31 @@
@@ -640,7 +636,7 @@ index 0000000..1587d15
 +};
 diff --git b/x64/demo/sdk_demo_v2/ZoomAuthenticator.cpp b/x64/demo/sdk_demo_v2/ZoomAuthenticator.cpp
 new file mode 100644
-index 0000000..5655aad
+index 0000000..cc6a0f0
 --- /dev/null
 +++ b/x64/demo/sdk_demo_v2/ZoomAuthenticator.cpp
 @@ -0,0 +1,24 @@
@@ -670,7 +666,7 @@ index 0000000..5655aad
 +}
 diff --git b/x64/demo/sdk_demo_v2/ZoomAuthenticator.h b/x64/demo/sdk_demo_v2/ZoomAuthenticator.h
 new file mode 100644
-index 0000000..f581a75
+index 0000000..4e1e205
 --- /dev/null
 +++ b/x64/demo/sdk_demo_v2/ZoomAuthenticator.h
 @@ -0,0 +1,14 @@
@@ -690,7 +686,7 @@ index 0000000..f581a75
 +};
 diff --git b/x64/demo/sdk_demo_v2/ZoomSDKAudioRawDataDelegate.cpp b/x64/demo/sdk_demo_v2/ZoomSDKAudioRawDataDelegate.cpp
 new file mode 100644
-index 0000000..24c722a
+index 0000000..d844feb
 --- /dev/null
 +++ b/x64/demo/sdk_demo_v2/ZoomSDKAudioRawDataDelegate.cpp
 @@ -0,0 +1,15 @@
@@ -711,7 +707,7 @@ index 0000000..24c722a
 +}
 diff --git b/x64/demo/sdk_demo_v2/ZoomSDKAudioRawDataDelegate.h b/x64/demo/sdk_demo_v2/ZoomSDKAudioRawDataDelegate.h
 new file mode 100644
-index 0000000..042ac76
+index 0000000..5489b8a
 --- /dev/null
 +++ b/x64/demo/sdk_demo_v2/ZoomSDKAudioRawDataDelegate.h
 @@ -0,0 +1,13 @@
@@ -728,36 +724,8 @@ index 0000000..042ac76
 +    virtual void onMixedAudioRawDataReceived(AudioRawData* data_) override;
 +    virtual void onOneWayAudioRawDataReceived(AudioRawData* data_, uint32_t node_id) override;
 +};
-diff --git b/x64/demo/sdk_demo_v2/config.yaml b/x64/demo/sdk_demo_v2/config.yaml
-new file mode 100644
-index 0000000..cc7d08e
---- /dev/null
-+++ b/x64/demo/sdk_demo_v2/config.yaml
-@@ -0,0 +1,7 @@
-+meeting:
-+  id:
-+  passcode: 
-+  display_name: Audio Bot
-+  join_url:  https://us02web.zoom.us/j/7845260545?pwd=M0NMRklrazdHc1NLU3B0c1REUk9vZz09
-+  join_token: true
-+  
-\ No newline at end of file
-diff --git b/x64/demo/sdk_demo_v2/credentials.yaml b/x64/demo/sdk_demo_v2/credentials.yaml
-new file mode 100644
-index 0000000..e79e578
---- /dev/null
-+++ b/x64/demo/sdk_demo_v2/credentials.yaml
-@@ -0,0 +1,7 @@
-+s2s:
-+  key: 48egj1LjT1pNRu4FUX6iw
-+  secret: savTK2Ny7NHztMV22LheWcazxefCjHPc
-+  account: -RtWUD64T9KwsSAhmHAjaQ
-+sdk:
-+  key: 77EVXlySUTw0hXfIRAb3RWFSpbhcVU7b2rZQ
-+  secret: FEIec8poHuxiov9W6XzaxDR7lHUC0lh64Oha
-\ No newline at end of file
 diff --git a/x64/demo/sdk_demo_v2/custom_ui_base.h b/x64/demo/sdk_demo_v2/custom_ui_base.h
-index 336ef2e..67a65d0 100644
+index b04b22e..5030604 100644
 --- a/x64/demo/sdk_demo_v2/custom_ui_base.h
 +++ b/x64/demo/sdk_demo_v2/custom_ui_base.h
 @@ -82,7 +82,7 @@ protected:
@@ -770,7 +738,7 @@ index 336ef2e..67a65d0 100644
  		wcex.lpfnWndProc	= my_wnd_proc;
  		wcex.cbClsExtra		= 0;
 diff --git a/x64/demo/sdk_demo_v2/custom_ui_share_mgr.cpp b/x64/demo/sdk_demo_v2/custom_ui_share_mgr.cpp
-index 543b919..61f1dda 100644
+index 2e62304..4f96257 100644
 --- a/x64/demo/sdk_demo_v2/custom_ui_share_mgr.cpp
 +++ b/x64/demo/sdk_demo_v2/custom_ui_share_mgr.cpp
 @@ -178,7 +178,7 @@ void CCustomizeUIShareSelectUI::InitWindow()
@@ -784,7 +752,7 @@ index 543b919..61f1dda 100644
  	m_btnShareSelectApp = static_cast<CButtonUI* >(m_PaintManager.FindControl(_T("btn_share_selectedapp")));
 diff --git b/x64/demo/sdk_demo_v2/sample.config.yaml b/x64/demo/sdk_demo_v2/sample.config.yaml
 new file mode 100644
-index 0000000..c654e95
+index 0000000..900c6e4
 --- /dev/null
 +++ b/x64/demo/sdk_demo_v2/sample.config.yaml
 @@ -0,0 +1,5 @@
@@ -796,10 +764,11 @@ index 0000000..c654e95
 \ No newline at end of file
 diff --git b/x64/demo/sdk_demo_v2/sample.credentials.yaml b/x64/demo/sdk_demo_v2/sample.credentials.yaml
 new file mode 100644
-index 0000000..82042d7
+index 0000000..332878e
 --- /dev/null
 +++ b/x64/demo/sdk_demo_v2/sample.credentials.yaml
-@@ -0,0 +1,7 @@
+@@ -0,0 +1,8 @@
++# This file is for quick development demo.  In production, credentials should not be stored in a plaintext file
 +s2s:
 +  key: 
 +  secret: 
@@ -809,7 +778,7 @@ index 0000000..82042d7
 +  secret:
 \ No newline at end of file
 diff --git a/x64/demo/sdk_demo_v2/sdk_demo_app.cpp b/x64/demo/sdk_demo_v2/sdk_demo_app.cpp
-index efc4485..b18e3b9 100644
+index d6d7dcc..5657bd6 100644
 --- a/x64/demo/sdk_demo_v2/sdk_demo_app.cpp
 +++ b/x64/demo/sdk_demo_v2/sdk_demo_app.cpp
 @@ -1,29 +1,37 @@
@@ -878,7 +847,7 @@ index efc4485..b18e3b9 100644
  	m_sdk_settings_ui_mgr->SwitchToPage(nPage);
  
 diff --git a/x64/demo/sdk_demo_v2/sdk_demo_v2.cpp b/x64/demo/sdk_demo_v2/sdk_demo_v2.cpp
-index ecb11d8..92e58c2 100644
+index c85eb5d..00267a1 100644
 --- a/x64/demo/sdk_demo_v2/sdk_demo_v2.cpp
 +++ b/x64/demo/sdk_demo_v2/sdk_demo_v2.cpp
 @@ -1,12 +1,21 @@
@@ -906,7 +875,7 @@ index ecb11d8..92e58c2 100644
  	while (GetMessage(&msg, NULL, 0, 0))
  	{
 diff --git a/x64/demo/sdk_demo_v2/sdk_demo_v2.vcxproj b/x64/demo/sdk_demo_v2/sdk_demo_v2.vcxproj
-index e270f52..ce24ecc 100644
+index 06538ed..65923de 100644
 --- a/x64/demo/sdk_demo_v2/sdk_demo_v2.vcxproj
 +++ b/x64/demo/sdk_demo_v2/sdk_demo_v2.vcxproj
 @@ -22,29 +22,29 @@
@@ -1002,7 +971,7 @@ index e270f52..ce24ecc 100644
    <ImportGroup Label="ExtensionTargets">
    </ImportGroup>
 diff --git a/x64/demo/sdk_demo_v2/sdk_demo_v2.vcxproj.filters b/x64/demo/sdk_demo_v2/sdk_demo_v2.vcxproj.filters
-index 00ad46d..08258f4 100644
+index 11ea1aa..b4bae58 100644
 --- a/x64/demo/sdk_demo_v2/sdk_demo_v2.vcxproj.filters
 +++ b/x64/demo/sdk_demo_v2/sdk_demo_v2.vcxproj.filters
 @@ -503,6 +503,9 @@
@@ -1016,7 +985,7 @@ index 00ad46d..08258f4 100644
    <ItemGroup>
      <ResourceCompile Include="sdk_demo_v2.rc">
 diff --git a/x64/demo/sdk_demo_v2/sdk_init_auth_ui.cpp b/x64/demo/sdk_demo_v2/sdk_init_auth_ui.cpp
-index 2314e1c..0f23b78 100644
+index 239280e..827388e 100644
 --- a/x64/demo/sdk_demo_v2/sdk_init_auth_ui.cpp
 +++ b/x64/demo/sdk_demo_v2/sdk_init_auth_ui.cpp
 @@ -1,6 +1,12 @@
@@ -1119,7 +1088,7 @@ index 2314e1c..0f23b78 100644
  	int ScreenX = GetSystemMetrics(SM_CXSCREEN);
  	int ScreenY = GetSystemMetrics(SM_CYSCREEN);
 diff --git a/x64/demo/sdk_demo_v2/settings_ui.cpp b/x64/demo/sdk_demo_v2/settings_ui.cpp
-index 21dfd05..9175466 100644
+index 2d70f53..637eef6 100644
 --- a/x64/demo/sdk_demo_v2/settings_ui.cpp
 +++ b/x64/demo/sdk_demo_v2/settings_ui.cpp
 @@ -2722,7 +2722,7 @@ void CSDKUICustomSettingsUIGroup::Show()
@@ -1141,7 +1110,7 @@ index 21dfd05..9175466 100644
  	m_panel_tab_main = static_cast<CVerticalLayoutUI*>(m_PaintManager.FindControl(_T("panel_Tab_Main")));
  	m_btnGeneralSettings = static_cast<COptionUI*>(m_PaintManager.FindControl(_T("tabbtn_general_settings")));
 diff --git a/x64/demo/sdk_demo_v2/stdafx.h b/x64/demo/sdk_demo_v2/stdafx.h
-index 8c86583..5b3dcb4 100644
+index 00f4af5..3ac0b71 100644
 --- a/x64/demo/sdk_demo_v2/stdafx.h
 +++ b/x64/demo/sdk_demo_v2/stdafx.h
 @@ -7,9 +7,19 @@
