@@ -1,4 +1,4 @@
-# Zoom Meeting SDK Raw Recording Sample
+# Zoom Meeting SDK for Windows Raw Recording Sample
 
 This sample uses the Zoom Meeting SDK for Windows in order to obtain recording permission and stream raw audio data.
 This sample patches the existing "sdk_demo_v2" demo solution that can be downloaded with the Meeting SDK.
