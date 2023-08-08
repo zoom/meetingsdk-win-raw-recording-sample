@@ -28,15 +28,19 @@ Run the following in Powershell
 ```bash
 # Clone down this repository
 git clone git@github.com:zoom/meetingsdk-win-raw-recording-sample.git
-
-# Open the repository
-cd meetingsdk-win-raw-recording-sample
 ```
+
+### Download the Zoom Windows SDK
+Download the Zoom SDK for Windows version 5.14.5.15340 from the Zoom Marketplace and place it in the `meetingsdk-win-raw-recording-sample` folder that was just downloaded
+
 
 ### Apply The Patch
 
 ```bash
-git apply -p1 --directory zoom-sdk-windows-5.14.5.15340 --whitespace=fix raw-recording-sample.patch
+# Open the repository
+cd meetingsdk-win-raw-recording-sample
+
+git apply -p1 --directory zoom-sdk-windows-5.14.5.15340/x64 raw-recording-sample.patch
 ````
 
 ### Set Credentials
@@ -45,7 +49,7 @@ If you already have credentials from a Zoom Meeting SDK app then you can follow 
 follow the section on how to [Create your Zoom Meeting SDK app](#create-your-zoom-meeting-sdk-app)
 
 ```bash
-cd zoom-sdk-windows-5.14.5.15340
+cd zoom-sdk-windows-5.14.5.15340/x64/demo/sdk_demo_v2
 
 # Copy the config file and enter meeting details
 cp sample.config.yaml config.yaml
