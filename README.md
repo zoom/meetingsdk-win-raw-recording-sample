@@ -12,14 +12,14 @@ This sample patches the existing "sdk_demo_v2" demo solution that can be downloa
     1. SDK Secret
 
 ### Install Dependencies
-Run the following in Powershell
+Run the following in Powershell. If you are using a version of vcpkg before September 2023 please make sure to add the triplet for your architecture: `--triplet x64-windows`
 
 ```bash
 # Use vcpkg to install dependencies
-./vcpkg install yaml-cpp
-./vcpkg install jwt-cpp
-./vcpkg install boost
-./vcpkg integrate install
+./vcpkg.exe install yaml-cpp
+./vcpkg.exe install jwt-cpp
+./vcpkg.exe install boost
+./vcpkg.exe integrate install
 
 ```
 
