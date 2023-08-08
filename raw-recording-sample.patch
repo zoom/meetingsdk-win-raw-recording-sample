@@ -695,11 +695,12 @@ new file mode 100644
 index 0000000..900c6e4
 --- /dev/null
 +++ b/demo/sdk_demo_v2/sample.config.yaml
-@@ -0,0 +1,5 @@
+@@ -0,0 +1,6 @@
 +meeting:
 +    id:
 +    passcode: 
 +    display_name: Audio Bot
++    join_url:
 +    join_token: false
 \ No newline at end of file
 diff --git b/demo/sdk_demo_v2/sample.credentials.yaml b/demo/sdk_demo_v2/sample.credentials.yaml
