@@ -12,6 +12,7 @@ This sample patches the existing "sdk_demo_v2" demo solution that can be downloa
     1. SDK Secret
 
 ### Install Dependencies
+Run the following in Powershell
 
 ```bash
 # Use vcpkg to install dependencies
@@ -26,10 +27,10 @@ This sample patches the existing "sdk_demo_v2" demo solution that can be downloa
 
 ```bash
 # Clone down this repository
-git clone git@github.com:zoom/zoomapps-sample-js.git
+git clone git@github.com:zoom/meetingsdk-win-raw-recording-sample.git
 
 # Open the repository
-cd meetingsdk-raw-recording-sample
+cd meetingsdk-win-raw-recording-sample
 ```
 
 ### Apply The Patch
